@@ -40,7 +40,8 @@ def napp(bench):
 
 
 def cache(app):
-	return app.root / ".fdesk-cache" / "catalog.json"
+	from fdesk_lib.catalog import cache_path
+	return cache_path(app)
 
 
 def test_lookup_kinds(napp):
@@ -104,7 +105,9 @@ def test_self_heals(napp, corruption):
 
 def test_cache_dir_is_a_file_does_not_crash(napp):
 	from fdesk_lib import catalog
-	(napp.root / ".fdesk-cache").write_text("i am a file")
+	from fdesk_lib.catalog import cache_path
+	cache_path(napp).parent.parent.mkdir(parents=True, exist_ok=True)
+	cache_path(napp).parent.write_text("i am a file")
 	assert catalog.lookup("doctype", "Foo Thing", napp) is True
 	assert catalog.refresh(napp)["persisted"] is False
 
@@ -159,7 +162,9 @@ def test_cli(bench):
 	p = run(bench, "--json", "catalog", "search", "foo", "--kind", "doctype")
 	assert [r["name"] for r in json.loads(p.stdout)["info"]["results"]] == ["Foo Thing"]
 	assert "write" in run(bench, "catalog", "--help").stdout.lower()
-	cache_file = bench / "apps" / "sample_app" / ".fdesk-cache" / "catalog.json"
+	from fdesk_lib.catalog import cache_path
+	from fdesk_lib.common import App
+	cache_file = cache_path(App.find(bench / "apps" / "sample_app"))
 	cache_file.write_text("{")
 	assert json.loads(run(bench, "--json", "catalog", "status").stdout)["info"]["state"] == "corrupt"
 	assert json.loads(run(bench, "--json", "catalog", "refresh").stdout)["info"]["rebuilt"] is True

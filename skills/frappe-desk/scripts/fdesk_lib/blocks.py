@@ -9,6 +9,7 @@ Facts (verified in frappe source):
   `root_element` (the shadow root); html goes through remove_script_and_style; CSS custom properties inherit into the shadow.
 - workspace wiring: frappe/public/js/frappe/widgets/custom_block_widget.js (content block data.custom_block_name,
   child table custom_blocks {custom_block_name, label}).
+  The widget finds its child row by LABEL == content data.custom_block_name (views/workspace/blocks/block.js make()), so label must equal the block name.
 """
 
 from __future__ import annotations
@@ -467,7 +468,7 @@ def cmd_new(args) -> Result:
 	block_id = _wired(ws_doc, name)
 	if block_id is None:
 		try:
-			block_id = workspace.add_block(ws_doc, "custom_block", child_row={"custom_block_name": name, "label": title},
+			block_id = workspace.add_block(ws_doc, "custom_block", child_row={"custom_block_name": name, "label": name},
 				data={"custom_block_name": name, "col": col})
 		except NotImplementedError:
 			raise FdeskError("workspace.add_block is not implemented yet")

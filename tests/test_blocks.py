@@ -53,7 +53,7 @@ def test_new_happy_path_and_idempotent(app):
 	hooks = (app.package / "hooks.py").read_text()
 	assert hooks.startswith(hooks_before) and '"dt": "Custom HTML Block"' in hooks and '["name", "in", ["open_todos"]]' in hooks
 	ws = load(ws_path(app))
-	assert ws["custom_blocks"] == [{"custom_block_name": "open_todos", "label": "Total"}]
+	assert ws["custom_blocks"] == [{"custom_block_name": "open_todos", "label": "open_todos"}]
 	assert any(b["type"] == "custom_block" and b["data"]["custom_block_name"] == "open_todos" for b in workspace.content_blocks(ws))
 	snap = {p: p.read_bytes() for p in app.package.rglob("*") if p.is_file()}
 	res = blocks.cmd_new(ns(app=str(app.root), roles="System Manager, Sales User", param=['doctype=Sales Invoice', 'filters={"docstatus": 1}']))

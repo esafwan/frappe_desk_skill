@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preview: Live Demo Stat</title>
+<style>
+/* Frappe v16 (Espresso) default values; source: frappe/public/css/espresso/colors.css + legacy.css */
+:root {
+	--bg-color: #ffffff; --card-bg: #ffffff; --control-bg: #f3f3f3; --subtle-fg: #f3f3f3;
+	--text-color: #171717; --text-muted: #525252; --text-light: #7c7c7c;
+	--border-color: #ededed; --btn-primary: #171717; --green-500: #43ac79; --red-500: #e03434;
+	--alert-text-danger: #c92a2a; --radius-md: 10px; --text-sm: 13px; --text-base: 14px; --text-lg: 16px;
+	--font-stack: "Inter", -apple-system, "Segoe UI", sans-serif; color-scheme: light;
+}
+[data-theme="dark"] {
+	--bg-color: #0f0f0f; --card-bg: #0f0f0f; --control-bg: #292929; --subtle-fg: #292929;
+	--text-color: #f3f3f3; --text-muted: #999999; --text-light: #7a7a7a;
+	--border-color: #242424; --btn-primary: #f3f3f3; --green-500: #117846; --red-500: #b03030;
+	--alert-text-danger: #f09090; color-scheme: dark;
+}
+body { margin: 0; padding: 24px; background: var(--bg-color); color: var(--text-color); font-family: var(--font-stack); font-size: 14px; }
+.bar { display: flex; gap: 16px; align-items: center; margin-bottom: 24px; flex-wrap: wrap; }
+.bar button, .bar select { font: inherit; padding: 4px 16px; background: var(--control-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 8px; height: 32px; }
+#host { max-width: 960px; }
+</style>
+</head>
+<body>
+<div class="bar">
+	<strong>Live Demo Stat</strong>
+	<button id="theme" type="button">Toggle light/dark</button>
+	<label>State <select id="state"><option>ok</option><option>loading</option><option>empty</option><option>error</option></select></label>
+</div>
+<div id="host"></div>
+<script>
+const BLOCK = {"html": "<div class=\"fd-block fd-stat\" data-state=\"loading\">\n\t<h3 class=\"fd-title\">Open KOTs<\/h3>\n\t<div class=\"fd-state fd-loading\" role=\"status\" aria-label=\"Loading\"><div class=\"fd-skeleton\"><\/div><\/div>\n\t<div class=\"fd-state fd-ready\" aria-live=\"polite\">\n\t\t<div class=\"fd-value\" data-role=\"value\"><\/div>\n\t\t<a class=\"fd-link fd-light\" data-role=\"link\" hidden>View all<\/a>\n\t<\/div>\n\t<div class=\"fd-state fd-empty-state\"><p class=\"fd-muted\" data-role=\"empty-text\">No data yet.<\/p><\/div>\n\t<div class=\"fd-state fd-error-state\" role=\"alert\"><p class=\"fd-error-text\" data-role=\"error-text\">Could not load data.<\/p><button type=\"button\" class=\"fd-btn\" data-role=\"retry\">Retry<\/button><\/div>\n<\/div>\n", "script": "/* shared helpers; root_element is injected by Frappe (shadow root), query only through it */\nconst CFG = {\"aggregate\": \"count\", \"doctype\": \"URY KOT\", \"empty_text\": \"No data yet.\", \"field\": \"\", \"filters\": {}, \"hide_zero\": false, \"prefix\": \"\", \"route\": \"List/URY KOT\", \"suffix\": \"\"};\nconst block = root_element.querySelector(\".fd-block\");\nconst q = (sel) => block.querySelector(sel);\nconst T = typeof __ === \"function\" ? __ : (s) => s;\nlet currentLoad = null;\nconst setState = (s) => { block.dataset.state = s; };\nconst call = (method, args) => frappe.call({ method: method, args: args }).then((r) => (r ? r.message : null));\nconst count = (doctype, filters) => call(\"frappe.client.get_count\", { doctype: doctype, filters: filters || {} });\nconst fmtNum = (v) => {\n\tconst n = Number(v);\n\treturn Number.isFinite(n) ? n.toLocaleString(undefined, { maximumFractionDigits: 2 }) : String(v == null ? \"\" : v);\n};\nconst go = (route) => {\n\tconst parts = String(route || \"\").split(\"/\").filter(Boolean);\n\tif (parts.length) frappe.set_route.apply(frappe, parts);\n};\nconst bindRoute = (el, route) => {\n\tel.setAttribute(\"href\", \"#\");\n\tel.addEventListener(\"click\", (e) => { e.preventDefault(); go(route); });\n};\nconst metric = (doctype, filters, field, agg) => {\n\tif (!field || !agg || agg === \"count\") return count(doctype, filters);\n\tconst fn = agg === \"avg\" ? \"avg\" : \"sum\";\n\treturn call(\"frappe.client.get_list\", {\n\t\tdoctype: doctype,\n\t\tfilters: filters || {},\n\t\tfields: [fn + \"(\" + field + \") as value\"],\n\t\tlimit_page_length: 1,\n\t}).then((rows) => (rows && rows[0] && rows[0].value) || 0);\n};\nconst el = (tag, cls, text) => {\n\tconst node = block.ownerDocument.createElement(tag);\n\tif (cls) node.className = cls;\n\tif (text != null) node.textContent = text;\n\treturn node;\n};\nconst run = (load) => {\n\tcurrentLoad = load;\n\tsetState(\"loading\");\n\tPromise.resolve().then(load).catch((err) => { console.error(err); setState(\"error\"); });\n};\nconst retryBtn = q('[data-role=\"retry\"]');\nif (retryBtn) retryBtn.addEventListener(\"click\", () => run(currentLoad));\nconst emptyMsg = q('[data-role=\"empty-text\"]');\nif (emptyMsg && CFG.empty_text) emptyMsg.textContent = CFG.empty_text;\nconst load = () => metric(CFG.doctype, CFG.filters, CFG.field, CFG.aggregate).then((v) => {\n\tq('[data-role=\"value\"]').textContent = (CFG.prefix || \"\") + fmtNum(v) + (CFG.suffix || \"\");\n\tconst link = q('[data-role=\"link\"]');\n\tif (CFG.route) { link.hidden = false; link.textContent = T(\"View all\"); bindRoute(link, CFG.route); }\n\tsetState(Number(v) === 0 && CFG.hide_zero ? \"empty\" : \"ready\");\n});\nrun(load);\n", "style": ":host { display: block; }\n.fd-block, .fd-block *, .fd-block *::before, .fd-block *::after { box-sizing: border-box; }\n.fd-block {\n\twidth: 100%;\n\tpadding: 16px;\n\tbackground: var(--card-bg, #ffffff);\n\tcolor: var(--text-color, #171717);\n\tborder: 1px solid var(--border-color, #ededed);\n\tborder-radius: var(--border-radius-md, var(--radius-md, 10px));\n\tfont-family: var(--font-stack, inherit);\n\tfont-size: var(--text-base, 14px);\n\tline-height: 24px;\n}\n.fd-title { margin: 0 0 8px; font-size: var(--text-sm, 13px); font-weight: 500; line-height: 16px; color: var(--text-muted, #525252); }\n.fd-muted { color: var(--text-muted, #525252); }\n.fd-light { color: var(--text-light, #7c7c7c); font-size: var(--text-sm, 13px); line-height: 16px; }\n.fd-state { display: none; }\n.fd-block[data-state=\"loading\"] .fd-loading,\n.fd-block[data-state=\"ready\"] .fd-ready,\n.fd-block[data-state=\"empty\"] .fd-empty-state,\n.fd-block[data-state=\"error\"] .fd-error-state { display: block; }\n.fd-skeleton { height: 24px; width: 50%; background: var(--control-bg, #f3f3f3); border-radius: 4px; animation: fd-pulse 1.5s ease-in-out infinite; }\n.fd-skeleton + .fd-skeleton { margin-top: 8px; width: 75%; }\n@keyframes fd-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }\n.fd-error-text { color: var(--alert-text-danger, #c52929); margin: 0 0 8px; }\n.fd-btn {\n\theight: 32px;\n\tpadding: 0 16px;\n\tfont: inherit;\n\tfont-size: var(--text-sm, 13px);\n\tcolor: var(--text-color, #171717);\n\tbackground: var(--control-bg, #f3f3f3);\n\tborder: 1px solid var(--border-color, #ededed);\n\tborder-radius: var(--border-radius-md, var(--radius-md, 10px));\n\tcursor: pointer;\n}\n.fd-btn:hover { border-color: var(--text-light, #7c7c7c); }\n.fd-link { color: var(--text-color, #171717); text-decoration: underline; border-radius: 4px; }\n.fd-btn:focus-visible, .fd-link:focus-visible, .fd-row:focus-visible, .fd-tile-link:focus-visible {\n\toutline: 2px solid var(--btn-primary, var(--text-color, #171717));\n\toutline-offset: 2px;\n}\n@media (prefers-reduced-motion: reduce) {\n\t.fd-skeleton { animation: none; }\n\t.fd-block * { transition: none !important; }\n}\n[hidden] { display: none !important; }\n.fd-value { font-size: 32px; font-weight: 600; line-height: 40px; color: var(--text-color, #171717); font-variant-numeric: tabular-nums; }\n.fd-stat .fd-link { display: inline-block; margin-top: 8px; }\n"};
+let STATE = new URLSearchParams(location.search).get("state") || "ok";
+document.getElementById("state").value = STATE;
+const SAMPLE_DATES = "2026-01-15 10:30:00";
+const frappeStub = {
+	call(opts) {
+		if (STATE === "loading") return new Promise(() => {});
+		if (STATE === "error") return Promise.reject(new Error("stub error"));
+		const a = opts.args || {};
+		let message;
+		if (opts.method === "frappe.client.get_count") {
+			if (STATE === "empty") message = 0;
+			else { const f = a.filters; message = f && Object.keys(f).length ? 38 : 120; }
+		} else if (opts.method === "frappe.client.get_list") {
+			const fields = a.fields || [];
+			if (STATE === "empty") message = [];
+			else if (fields.some((f) => /^(sum|avg)\(/.test(f))) message = [{ value: 18450.5 }];
+			else message = [1, 2, 3, 4, 5].slice(0, a.limit_page_length || 5).map((n) => {
+				const r = { name: "DOC-000" + n };
+				fields.forEach((f) => { if (f !== "name") r[f] = f === "modified" || f === "creation" ? SAMPLE_DATES : "Sample " + f + " " + n; });
+				return r;
+			});
+		}
+		return Promise.resolve({ message });
+	},
+	set_route() { console.log("set_route", Array.from(arguments)); },
+	datetime: { comment_when() { return "2 hours ago"; } },
+};
+function render() {
+	const host = document.getElementById("host");
+	host.textContent = "";
+	const holder = document.createElement("div");
+	host.appendChild(holder);
+	const shadow = holder.attachShadow({ mode: "open" });
+	const style = document.createElement("style");
+	style.textContent = BLOCK.style;
+	const div = document.createElement("div");
+	div.innerHTML = BLOCK.html;
+	shadow.appendChild(div);
+	shadow.appendChild(style);
+	try {
+		new Function("root_element", "frappe", "__", BLOCK.script)(shadow, frappeStub, (s) => s);
+	} catch (e) { console.error(e); }
+}
+document.getElementById("theme").addEventListener("click", () => {
+	const r = document.documentElement;
+	r.dataset.theme = r.dataset.theme === "dark" ? "light" : "dark";
+});
+document.getElementById("state").addEventListener("change", (e) => { STATE = e.target.value; render(); });
+render();
+</script>
+</body>
+</html>

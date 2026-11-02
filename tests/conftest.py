@@ -16,3 +16,9 @@ def app(tmp_path):
 	dst = tmp_path / "sample_app"
 	shutil.copytree(ROOT / "tests" / "fixtures" / "sample_app", dst)
 	return App.find(dst)
+
+
+@pytest.fixture(autouse=True)
+def _isolated_cache(tmp_path, monkeypatch):
+	"""Catalog cache never touches ~/.cache during tests (subprocess tests inherit the env)."""
+	monkeypatch.setenv("FDESK_CACHE_DIR", str(tmp_path / "fdesk-cache"))

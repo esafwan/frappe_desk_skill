@@ -35,7 +35,7 @@ Each trap: symptom, cause (source), fix, lint ID. Lint IDs are defined here (can
 | 6 | Empty box where an icon should be | Unknown name draws nothing (`frappe/frappe/public/js/frappe/utils/utils.js`) | `fdesk icons search`; bare name, no `icon-` prefix | L05 |
 | 7 | Letter tile instead of icon | No icon set on Dock item or Sidebar (`dock.js`, `sidebar_header.js`) | Set `icon` / `header_icon` | L05, L13 |
 | 8 | Legacy icon names (`sell`, `stock`) show nothing | Old vocabulary has no symbols | Use lucide or `-duotone` names | L05 |
-| 9 | `-duotone` icon not found on a sidebar item | `-duotone`/`-soft` live in `module-icons.svg`, intended for header/dock | Use lucide names on items; `-duotone` header, `-soft` dock | L05 |
+| 9 | `-duotone` icon not found on a sidebar item | `-duotone`/`-soft` live in `module-icons.svg`, rendered as variants on the Dock | Use lucide or module-icon names on items and headers; `-duotone` variants are valid on Dock tiles only | L05 |
 | 10 | Item shows but opens "not found" | `link_to` names a missing DocType/Report/Page/Workspace | Check with `fdesk catalog search`; fix name | L06 |
 | 11 | Child rows have no icon | Children of an `indent=1` section never draw icons (`sidebar_item.js`) | Omit `icon` on them; nothing to fix | none |
 | 12 | Child ends up in the wrong section | Nesting is order + `child=1`, there is no parent id (`sidebar.js` `nest_section_items`) | Use `move-item`, which places rows in order | L03 |

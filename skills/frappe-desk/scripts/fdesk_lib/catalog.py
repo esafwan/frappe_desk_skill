@@ -1,6 +1,6 @@
 """Self-healing catalog of linkable entities across the app and every installed bench app.
 
-Cache: <app root>/.fdesk-cache/catalog.json. Always rebuilt when missing, corrupt, wrong schema or
+Cache: $FDESK_CACHE_DIR or ~/.cache/fdesk/<hash of app path>/catalog.json (never inside the app repo). Always rebuilt when missing, corrupt, wrong schema or
 fingerprint-stale; never trusted blindly; written atomically (temp file + rename).
 """
 
@@ -205,7 +205,15 @@ def _build(scans: dict, heads: dict, bench: Path | None, fingerprint: str) -> di
 # ---- cache io ------------------------------------------------------------------
 
 def cache_path(app: App) -> Path:
-	return Path(app.root) / CACHE_DIR / CACHE_FILE
+	"""Outside the app repo by default: $FDESK_CACHE_DIR, else $XDG_CACHE_HOME/~/.cache + fdesk/<hash of app path>/."""
+	import hashlib
+	import os
+
+	base = os.environ.get("FDESK_CACHE_DIR")
+	if not base:
+		base = os.path.join(os.environ.get("XDG_CACHE_HOME") or os.path.expanduser("~/.cache"), "fdesk")
+	key = hashlib.sha1(str(Path(app.root).resolve()).encode()).hexdigest()[:12]
+	return Path(base) / key / CACHE_FILE
 
 
 def _valid(cat) -> bool:
@@ -339,10 +347,10 @@ def cmd_search(args) -> Result:
 
 
 def register(sub):
-	note = "The cache <app>/.fdesk-cache/catalog.json is ALWAYS written: --write/dry-run semantics do not apply to it."
+	note = "The cache (~/.cache/fdesk/..., or $FDESK_CACHE_DIR) is ALWAYS written: --write/dry-run semantics do not apply to it."
 	g = sub.add_parser("catalog", help="self-healing cache of linkable entities (always written; --write does not apply)", description=note)
 	gs = g.add_subparsers(dest="cmd", required=True)
-	p = gs.add_parser("refresh", help="rebuild the cache if stale (always written to <app>/.fdesk-cache/catalog.json)")
+	p = gs.add_parser("refresh", help="rebuild the cache if stale (always written to the user cache dir)")
 	p.add_argument("--force", action="store_true", help="rebuild even when the fingerprint matches")
 	p.set_defaults(func=cmd_refresh)
 	p = gs.add_parser("status", help="show cache state (fresh|stale|missing|corrupt) without writing")

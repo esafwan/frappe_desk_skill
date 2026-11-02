@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import os
 import shlex
 import subprocess
 from datetime import datetime
@@ -160,10 +161,22 @@ def _changed(ents, probe) -> list[dict]:
 		fm, dm = _norm_ts(e["modified"]), _norm_ts(db.get("modified"))
 		if fm is None or dm is None or fm > dm:
 			ch.append(e)
+			continue
+		if e["doctype"] != "Custom HTML Block":
+			# same `modified` but the DB rows differ from the file (hand-edited site, interrupted import): frappe would skip it
+			fs, ds = summarize(e["doc"]), summarize(db)
+			if any(fs[k] != ds.get(k) for k in fs):
+				ch.append(e)
 	return ch
 
 
 # ---------------------------------------------------------------- apply
+
+def _container_path(args, host_path) -> str:
+	"""Host path under --bench -> the same file as the runner sees it (--bench-cwd)."""
+	rel = os.path.relpath(str(host_path), str(args.bench))
+	return os.path.join(args.bench_cwd or str(args.bench), rel)
+
 
 def cmd_apply(args) -> Result:
 	app = App.find(args.app)
@@ -174,10 +187,12 @@ def cmd_apply(args) -> Result:
 	steps: list[tuple[str, list[str]]] = []
 	probe_cmd = _wrap(args, _console(args, _probe_script(ents)))
 	steps.append(("probe", probe_cmd))
-	reset_targets = [e for e in ents if e["doctype"] in ("Sidebar", "Dock")]
+	reset_targets = [e for e in ents if e["doctype"] in ("Sidebar", "Dock", "Workspace")]
 	if args.reset_nav:
 		steps.append(("reset-nav", None))  # built at run time from changed set
 	steps.append(("migrate", _wrap(args, f"bench --site {site} migrate")))
+	if args.reset_nav:
+		steps.append(("reimport-dock", None))  # built at run time (frappe imports Dock before Sidebar, which empties it)
 	steps.append(("clear-cache", _wrap(args, f"bench --site {site} clear-cache")))
 	steps.append(("touch-hooks", _wrap(args, f"touch apps/{app.name}/{app.name}/hooks.py")))
 	if args.restart_cmd:
@@ -185,9 +200,11 @@ def cmd_apply(args) -> Result:
 	res.info["workers_note"] = "restart queue/scheduler/socketio workers if they cache app code (pass --restart-cmd to automate)"
 
 	def show_step(name, argv):
+		if argv is None and name == "reimport-dock":
+			return "reimport-dock: re-import changed Dock files after migrate (only when a Dock was reset)"
 		if argv is None:
 			names = [e["name"] for e in reset_targets]
-			return f"reset-nav: delete changed Sidebar/Dock rows (candidates: {names}; filtered to changed at --write)"
+			return f"reset-nav: delete changed Sidebar/Dock/Workspace rows (candidates: {names}; filtered to changed at --write)"
 		return f"{name}: {_show(argv)}"
 
 	res.info["commands"] = [show_step(n, a) for n, a in steps]
@@ -206,9 +223,19 @@ def cmd_apply(args) -> Result:
 			res.info["changed"] = [f"{e['doctype']}|{e['name']}" for e in changed]
 			if not probe.get("developer_mode"):
 				res.warnings.append("developer_mode is off: standard=1 docs cannot be edited/exported from the desk; migrate still imports from files")
+			ran.append({"step": "probe", "rc": 0})
 			continue
+		if name == "reimport-dock":
+			docks = [e for e in changed if e["doctype"] == "Dock"]
+			if not docks:
+				continue
+			# frappe imports Dock before Sidebar on migrate; a Dock row pointing at a not-yet-imported Sidebar loses its tiles.
+			paths = [_container_path(args, e["path"]) for e in docks]
+			script = "import frappe\nfrom frappe.modules.import_file import import_file_by_path\n" + "".join(
+				f"import_file_by_path({pp!r}, force=True)\n" for pp in paths) + "frappe.db.commit()"
+			argv = _wrap(args, _console(args, script))
 		if name == "reset-nav":
-			victims = [e for e in changed if e["doctype"] in ("Sidebar", "Dock")]
+			victims = [e for e in changed if e["doctype"] in ("Sidebar", "Dock", "Workspace")]
 			if not victims:
 				continue
 			script = "import frappe\n" + "".join(
@@ -241,7 +268,12 @@ def cmd_verify(args) -> Result:
 			mism.append({"entity": key, "problem": "missing in DB"})
 			continue
 		fm, dm = _norm_ts(e["modified"]), _norm_ts(db.get("modified"))
-		if fm != dm:
+		if e["doctype"] == "Custom HTML Block":
+			# fixtures are overwritten on every migrate and records need not carry `modified`: compare content
+			for f in ("html", "script", "style"):
+				if (e["doc"].get(f) or "") != (db.get(f) or ""):
+					mism.append({"entity": key, "problem": f"{f} differs"})
+		elif fm != dm:
 			mism.append({"entity": key, "problem": "modified differs", "file": e["modified"], "db": db.get("modified")})
 		fs, ds = summarize(e["doc"]), summarize(db)
 		for k in fs:

@@ -61,10 +61,10 @@ def test_command_order_and_docker_runner(app, tmp_path, monkeypatch):
 	r = ab.cmd_apply(ns(app, make_bench(tmp_path), reset_nav=True, restart_cmd="supervisorctl restart all",
 		runner="docker exec box bash -c", bench_cwd="/home/frappe/bench"))
 	assert r.ok
-	assert [c["step"] for c in r.info["ran"]] == ["reset-nav", "migrate", "clear-cache", "touch-hooks", "restart"]
+	assert [c["step"] for c in r.info["ran"]] == ["probe", "reset-nav", "migrate", "reimport-dock", "clear-cache", "touch-hooks", "restart"]
 	assert all(c[:4] == ["docker", "exec", "box", "bash"] for c in f.cmds)
 	assert "cd /home/frappe/bench" in f.cmds[1][-1]
-	assert "migrate" in f.cmds[2][-1] and "clear-cache" in f.cmds[3][-1] and "hooks.py" in f.cmds[4][-1]
+	assert "migrate" in f.cmds[2][-1] and "clear-cache" in f.cmds[4][-1] and "hooks.py" in f.cmds[5][-1]
 
 
 def test_reset_nav_only_changed(app, tmp_path, monkeypatch):

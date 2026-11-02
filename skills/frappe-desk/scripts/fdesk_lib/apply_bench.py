@@ -16,7 +16,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from .common import App, FdeskError, Result, load
+from .common import App, FdeskError, Result, bump_modified, detect_style, load, render, unified_diff
 
 NAV_DIRS = ("sidebar", "dock", "workspace", "number_card", "dashboard_chart")
 DOCTYPES = {"sidebar": "Sidebar", "dock": "Dock", "workspace": "Workspace",
@@ -111,7 +111,7 @@ def summarize(doc: dict) -> dict:
 	"""Comparable shape of a nav document (same function for file and DB side)."""
 	s = {}
 	items = doc.get("items") or []
-	if doc.get("doctype") == "Dock" or "app" in doc and "items" in doc and not any("label" in i for i in items):
+	if doc.get("doctype") == "Dock":
 		s["tiles"] = [i.get("title") for i in items]
 	else:
 		s["items"] = [[i.get("type"), i.get("label"), i.get("icon")] for i in items]
@@ -172,9 +172,13 @@ def _changed(ents, probe) -> list[dict]:
 
 # ---------------------------------------------------------------- apply
 
-def _container_path(args, host_path) -> str:
+def _container_path(args, host_path, strict=True) -> str:
 	"""Host path under --bench -> the same file as the runner sees it (--bench-cwd)."""
-	rel = os.path.relpath(str(host_path), str(args.bench))
+	rel = os.path.relpath(os.path.realpath(str(host_path)), os.path.realpath(str(args.bench)))
+	if rel.startswith(".."):
+		if not strict:
+			return f"apps/{host_path.parent.name}/{host_path.parent.name}/{host_path.name}"
+		raise FdeskError(f"{host_path} is not inside --bench {args.bench}; the runner could not see it")
 	return os.path.join(args.bench_cwd or str(args.bench), rel)
 
 
@@ -187,24 +191,19 @@ def cmd_apply(args) -> Result:
 	steps: list[tuple[str, list[str]]] = []
 	probe_cmd = _wrap(args, _console(args, _probe_script(ents)))
 	steps.append(("probe", probe_cmd))
-	reset_targets = [e for e in ents if e["doctype"] in ("Sidebar", "Dock", "Workspace")]
 	if args.reset_nav:
-		steps.append(("reset-nav", None))  # built at run time from changed set
+		res.warnings.append("--reset-nav is deprecated and now a no-op: apply force-imports every changed file after migrate and never deletes rows")
 	steps.append(("migrate", _wrap(args, f"bench --site {site} migrate")))
-	if args.reset_nav:
-		steps.append(("reimport-dock", None))  # built at run time (frappe imports Dock before Sidebar, which empties it)
+	steps.append(("reimport", None))  # built at run time from the changed set
 	steps.append(("clear-cache", _wrap(args, f"bench --site {site} clear-cache")))
-	steps.append(("touch-hooks", _wrap(args, f"touch apps/{app.name}/{app.name}/hooks.py")))
+	steps.append(("touch-hooks", _wrap(args, "touch " + shlex.quote(_container_path(args, app.package / "hooks.py", strict=False)))))
 	if args.restart_cmd:
 		steps.append(("restart", _wrap(args, args.restart_cmd)))
 	res.info["workers_note"] = "restart queue/scheduler/socketio workers if they cache app code (pass --restart-cmd to automate)"
 
 	def show_step(name, argv):
-		if argv is None and name == "reimport-dock":
-			return "reimport-dock: re-import changed Dock files after migrate (only when a Dock was reset)"
 		if argv is None:
-			names = [e["name"] for e in reset_targets]
-			return f"reset-nav: delete changed Sidebar/Dock/Workspace rows (candidates: {names}; filtered to changed at --write)"
+			return "reimport: force-import changed Sidebar/Workspace/Number Card/Dashboard Chart files, then Dock (nothing is deleted; changed set is computed at --write)"
 		return f"{name}: {_show(argv)}"
 
 	res.info["commands"] = [show_step(n, a) for n, a in steps]
@@ -225,28 +224,19 @@ def cmd_apply(args) -> Result:
 				res.warnings.append("developer_mode is off: standard=1 docs cannot be edited/exported from the desk; migrate still imports from files")
 			ran.append({"step": "probe", "rc": 0})
 			continue
-		if name == "reimport-dock":
-			docks = [e for e in changed if e["doctype"] == "Dock"]
-			if not docks:
+		if name == "reimport":
+			# Frappe skips a file whose `modified` is not newer than the DB row, and imports Dock before an app-rooted Sidebar
+			# (a Dock tile whose Sidebar is not there yet is dropped). Force-import in dependency order; never delete rows
+			# (frappe.delete_doc would remove the app's JSON file in developer mode).
+			order = {"Sidebar": 0, "Workspace": 1, "Number Card": 2, "Dashboard Chart": 2, "Dock": 3}
+			todo = sorted((e for e in changed if e["doctype"] in order), key=lambda e: (order[e["doctype"]], e["name"]))
+			if not todo:
 				continue
-			# frappe imports Dock before Sidebar on migrate; a Dock row pointing at a not-yet-imported Sidebar loses its tiles.
-			paths = [_container_path(args, e["path"]) for e in docks]
-			script = "import frappe\nfrom frappe.modules.import_file import import_file_by_path\n" + "".join(
-				f"import_file_by_path({pp!r}, force=True)\n" for pp in paths) + "frappe.db.commit()"
-			argv = _wrap(args, _console(args, script))
-		if name == "reset-nav":
-			victims = [e for e in changed if e["doctype"] in ("Sidebar", "Dock", "Workspace")]
-			if not victims:
-				continue
-			# Never frappe.delete_doc here: in developer mode it deletes the app's JSON file from disk
-			# and Workspace.on_trash rewrites Custom Sidebar rows. Remove only the DB rows; migrate re-imports from the files.
+			paths = [_container_path(args, e["path"]) for e in todo]
 			script = (
-				"import frappe\n"
-				"def _drop(dt, n):\n"
-				"    for tf in frappe.get_meta(dt).get_table_fields():\n"
-				"        frappe.db.delete(tf.options, {'parent': n, 'parenttype': dt})\n"
-				"    frappe.db.delete(dt, {'name': n})\n"
-				+ "".join(f"_drop({e['doctype']!r}, {e['name']!r})\n" for e in victims)
+				"import frappe\nfrom frappe.modules.import_file import import_file_by_path\n"
+				"frappe.flags.in_migrate = True\n"
+				+ "".join(f"import_file_by_path({pp!r}, force=True)\n" for pp in paths)
 				+ "frappe.db.commit()"
 			)
 			argv = _wrap(args, _console(args, script))
@@ -337,20 +327,32 @@ def _plan_text(res, path: Path, text: str):
 def cmd_restore(args) -> Result:
 	app = App.find(args.app)
 	res = Result()
+	if not re.fullmatch(r"[\w.\-]+", args.name or "") or args.name in (".", ".."):
+		raise FdeskError(f"invalid snapshot name {args.name!r}")
 	base = app.root / SNAP_DIR / args.name
 	mf = base / "manifest.json"
 	if not mf.exists():
 		raise FdeskError(f"no snapshot {args.name!r} at {base}")
 	files = json.loads(mf.read_text())["files"]
+	root = app.root.resolve()
 	for rel, sha in files.items():
+		dest = (app.root / rel).resolve()
+		if root not in dest.parents or not (dest.suffix == ".json" and _is_nav_rel(rel)):
+			raise FdeskError(f"snapshot {args.name!r} lists a path outside the app's nav files: {rel}")
 		src = base / "files" / rel
 		if not src.exists() or _sha(src.read_bytes()) != sha:
 			raise FdeskError(f"snapshot {args.name!r} is corrupt at {rel}")
-		_plan_text(res, app.root / rel, src.read_text(encoding="utf-8"))
+		if "/fixtures/" in "/" + rel:
+			_plan_text(res, app.root / rel, src.read_text(encoding="utf-8"))
+		else:
+			# restored files get a fresh `modified` (strictly newer than the current file), or the next migrate would skip them
+			_plan_restore_json(res, app.root / rel, src.read_text(encoding="utf-8"))
 	extra = [_rel(app, p) for p in nav_files(app) if _rel(app, p) not in files]
 	for rel in extra:
 		if args.prune:
 			res.changes.append({"path": str(app.root / rel), "action": "delete", "diff": ""})
+			if any(k in rel for k in ("/number_card/", "/dashboard_chart/", "custom_html_block")):
+				res.warnings.append(f"pruned {rel}: Number Card / Dashboard Chart / Custom HTML Block rows are not removed from sites; add a patch (see references/recipes.md 'Rename and removal')")
 		else:
 			res.warnings.append(f"created after snapshot (kept; use --prune to delete): {rel}")
 	res.info["differences"] = [f"{c['action']}: {c['path']}" for c in res.changes]
@@ -369,7 +371,7 @@ def register(sub):
 	g = sub.add_parser("apply", help="migrate + clear-cache + reload on a bench")
 	g.set_defaults(func=cmd_apply)
 	bench_args(g)
-	g.add_argument("--reset-nav", action="store_true", help="delete changed Sidebar/Dock rows before migrate")
+	g.add_argument("--reset-nav", action="store_true", help="deprecated no-op (apply never deletes rows; it force-imports changed files after migrate)")
 	g.add_argument("--restart-cmd", default=None)
 
 	g = sub.add_parser("verify", help="compare DB vs files")
@@ -384,3 +386,21 @@ def register(sub):
 	g.add_argument("--name", required=True)
 	g.add_argument("--prune", action="store_true")
 	g.set_defaults(func=cmd_restore)
+
+
+def _is_nav_rel(rel: str) -> bool:
+	parts = rel.split("/")
+	return any(p in ("sidebar", "dock", "workspace", "number_card", "dashboard_chart") for p in parts) or rel.endswith("fixtures/custom_html_block.json")
+
+
+def _plan_restore_json(res: Result, dest: Path, snap_text: str) -> None:
+	"""Restore a snapshotted entity file byte for byte except `modified`, which becomes newer than the current file's."""
+	doc = json.loads(snap_text)
+	style = detect_style(snap_text)
+	before = dest.read_text(encoding="utf-8") if dest.exists() else ""
+	base = json.loads(before).get("modified") if before else None
+	if before and render({**doc, "modified": base}, style) == before:
+		return
+	bump_modified(doc, base)
+	after = render(doc, style)
+	res.changes.append({"path": str(dest), "action": "update" if before else "create", "diff": unified_diff(before, after, dest.name), "_text": after})

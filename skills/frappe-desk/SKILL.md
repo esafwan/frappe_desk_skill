@@ -38,13 +38,13 @@ Every mutating command is idempotent: a second run says `no changes`. Add `--jso
 
 ## Hard rules (the CLI enforces them; know why)
 1. **Never hand-edit nav JSON.** Folder and file names must equal `scrub(name)`; formatting is Frappe's (1-space indent, sorted keys, escaped non-ASCII, one trailing newline); hand-written files keep their own style. Use the CLI.
-2. **A changed file imports on migrate only if its `modified` is newer than the DB row.** The CLI bumps it. If a site still shows the old version, `apply --reset-nav`.
+2. **A changed file imports on migrate only if its `modified` is newer than the DB row.** The CLI bumps it. `apply` also force-imports any changed or drifted file after migrate, so an older restored file or a hand-edited site row is corrected.
 3. **A Section Break cannot carry a link.** Each section starts with an Overview child; empty sections do not render.
 4. **Icons come from sprites, not a free list.** Check with `icons check`; `-duotone` is valid only on Dock tiles.
 5. **Number Cards and Dashboard Charts are not reaped** when their file is removed: renames and deletions need a patch (see `references/recipes.md` "Rename and removal").
 6. **Custom HTML Blocks ship as fixtures** (`fixtures/custom_html_block.json` + a `hooks.py` fixtures filter), not as entity files. Scripts must use `root_element`; style with CSS variables so dark mode works.
 7. **A Custom Sidebar row on a site can mask your change.** `verify` lists overriding rows.
-8. **Never delete rows or migrate on a site without saying so.** `apply` and `restore` are dry-run unless `--write`; `--reset-nav` deletes only Sidebar/Dock rows that the files redefine.
+8. **`apply` and `restore` are dry-run unless `--write`.** `apply` never deletes rows or files: it runs migrate, then force-imports every changed/drifted Sidebar, Workspace, Number Card, Dashboard Chart and Dock file (Dock last). Never use `frappe.delete_doc` on standard nav docs to force a re-import: in developer mode it deletes the app's JSON file. `restore --prune` deletes files created after the snapshot.
 9. Standard docs can be edited in the DB only in developer mode; file edits + migrate work everywhere.
 
 ## When something looks wrong

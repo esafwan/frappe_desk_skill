@@ -769,6 +769,13 @@ def cmd_lint(args) -> Result:
 	app = App.find(args.app)
 	only = [x.strip().upper() for x in args.only.split(",") if x.strip()] if args.only else None
 	findings = run_lint(app, only)
+	if args.strict:
+		# a gate that cannot verify icons/targets must not pass silently (no bench found -> info)
+		for f in findings:
+			if f.severity == "info" and "cannot be verified" in f.message:
+				f.severity = "warn"
+				f.message += " (--strict: run with the app inside a bench, or set FDESK_BENCH)"
+		findings.sort(key=lambda f: ({s: n for n, s in enumerate(SEVERITIES)}[f.severity], f.rule, f.path, f.message))
 	counts = {s: sum(1 for f in findings if f.severity == s) for s in SEVERITIES}
 	failed = counts["error"] > 0 or (args.strict and counts["warn"] > 0)
 	res = Result(ok=not failed)

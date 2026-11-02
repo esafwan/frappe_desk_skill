@@ -13,7 +13,7 @@ FDESK = Path(__file__).resolve().parent.parent / "skills" / "frappe-desk" / "scr
 
 
 def make_bench(tmp_path, version="16.0.0"):
-	b = tmp_path / "bench"
+	b = tmp_path
 	(b / "apps" / "frappe" / "frappe").mkdir(parents=True, exist_ok=True)
 	(b / "apps" / "frappe" / "frappe" / "__init__.py").write_text(f'__version__ = "{version}"\n')
 	return b
@@ -52,7 +52,7 @@ def test_dry_run_runs_nothing_and_lists_commands(app, tmp_path, monkeypatch):
 	r = ab.cmd_apply(ns(app, make_bench(tmp_path), write=False, reset_nav=True))
 	assert f.cmds == []
 	joined = "\n".join(r.info["commands"])
-	assert "migrate" in joined and "clear-cache" in joined and "reset-nav" in joined
+	assert "migrate" in joined and "clear-cache" in joined and "reimport" in joined
 
 
 def test_command_order_and_docker_runner(app, tmp_path, monkeypatch):
@@ -61,10 +61,10 @@ def test_command_order_and_docker_runner(app, tmp_path, monkeypatch):
 	r = ab.cmd_apply(ns(app, make_bench(tmp_path), reset_nav=True, restart_cmd="supervisorctl restart all",
 		runner="docker exec box bash -c", bench_cwd="/home/frappe/bench"))
 	assert r.ok
-	assert [c["step"] for c in r.info["ran"]] == ["probe", "reset-nav", "migrate", "reimport-dock", "clear-cache", "touch-hooks", "restart"]
+	assert [c["step"] for c in r.info["ran"]] == ["probe", "migrate", "reimport", "clear-cache", "touch-hooks", "restart"]
 	assert all(c[:4] == ["docker", "exec", "box", "bash"] for c in f.cmds)
 	assert "cd /home/frappe/bench" in f.cmds[1][-1]
-	assert "migrate" in f.cmds[2][-1] and "clear-cache" in f.cmds[4][-1] and "hooks.py" in f.cmds[5][-1]
+	assert "migrate" in f.cmds[1][-1] and "clear-cache" in f.cmds[3][-1] and "hooks.py" in f.cmds[4][-1]
 
 
 def test_reset_nav_only_changed(app, tmp_path, monkeypatch):
@@ -113,7 +113,9 @@ def test_snapshot_restore_roundtrip_prune_idempotent(app):
 	r3 = ab.cmd_restore(a)
 	assert any(str(victim) == c["path"] for c in r3.changes) and any("extra.json" in w for w in r3.warnings)
 	apply_res(r3, True)
-	assert victim.read_text() == orig and new.exists()
+	import re as _re
+	strip = lambda t: _re.sub(r'"modified": "[^"]*"', "", t)
+	assert strip(victim.read_text()) == strip(orig) and new.exists()
 	a.prune = True
 	apply_res(ab.cmd_restore(a), True)
 	assert not new.exists()
@@ -126,3 +128,40 @@ def test_cli_snapshot_subprocess(app):
 	assert p.returncode == 0, p.stderr
 	assert json.loads(p.stdout)["info"]["snapshot"].endswith("c1")
 	assert (app.root / ".fdesk-snapshots" / "c1" / "manifest.json").exists()
+
+
+def test_restore_rejects_bad_name_and_traversal(app):
+	with pytest.raises(FdeskError, match="invalid snapshot name"):
+		ab.cmd_restore(argparse.Namespace(app=str(app.root), name="../x", prune=False))
+	a = argparse.Namespace(app=str(app.root), name="s2", prune=False)
+	apply_res(ab.cmd_snapshot(a), True)
+	mf = app.root / ".fdesk-snapshots" / "s2" / "manifest.json"
+	m = json.loads(mf.read_text())
+	m["files"]["../../evil/workspace/x.json"] = "0" * 64
+	mf.write_text(json.dumps(m))
+	with pytest.raises(FdeskError, match="outside"):
+		ab.cmd_restore(a)
+
+
+def test_restore_bumps_modified_so_migrate_will_import(app):
+	a = argparse.Namespace(app=str(app.root), name="s3", prune=False)
+	apply_res(ab.cmd_snapshot(a), True)
+	victim = ab.nav_files(app)[0]
+	doc = json.loads(victim.read_text())
+	doc["icon"] = "changed-icon"
+	doc["modified"] = "2026-06-01 00:00:00.000000"
+	victim.write_text(json.dumps(doc, indent=1, sort_keys=True) + "\n")
+	apply_res(ab.cmd_restore(a), True)
+	assert json.loads(victim.read_text())["modified"] > "2026-06-01 00:00:00.000000"
+
+
+def test_apply_force_imports_drift_without_deleting(app, tmp_path, monkeypatch):
+	ents = ab.entities(app)
+	e = next(x for x in ents if x["doctype"] == "Dock")
+	db = {"doctype": "Dock", "name": e["name"], "modified": e["modified"], "items": []}
+	f = Fake({"docs": {f"{x['doctype']}|{x['name']}": (db if x is e else x["doc"]) for x in ents}, "overrides": [], "developer_mode": True})
+	monkeypatch.setattr(ab, "run", f)
+	r = ab.cmd_apply(ns(app, make_bench(tmp_path)))
+	joined = "\n".join(c[-1] for c in f.cmds)
+	assert "import_file_by_path" in joined and "delete" not in joined.lower() and "force=True" in joined
+	assert r.info["changed"] == [f"Dock|{e['name']}"]

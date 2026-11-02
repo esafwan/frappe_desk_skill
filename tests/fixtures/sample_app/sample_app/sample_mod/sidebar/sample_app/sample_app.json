@@ -1,0 +1,49 @@
+{
+ "app": "sample_app",
+ "creation": "2026-01-01 10:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Sidebar",
+ "header_icon": "home",
+ "items": [
+  {
+   "child": 0,
+   "icon": "house",
+   "indent": 0,
+   "label": "Home",
+   "link_to": "Sample Home",
+   "link_type": "Workspace",
+   "type": "Link"
+  },
+  {
+   "collapsible": 1,
+   "icon": "briefcase",
+   "indent": 1,
+   "keep_closed": 0,
+   "label": "Work",
+   "type": "Section Break"
+  },
+  {
+   "child": 1,
+   "indent": 0,
+   "label": "Overview",
+   "link_to": "Sample Ops",
+   "link_type": "Workspace",
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "indent": 0,
+   "label": "Sample Doc",
+   "link_to": "Sample Doc",
+   "link_type": "DocType",
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-01-01 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Sample Mod",
+ "name": "Sample App",
+ "owner": "Administrator",
+ "standard": 1,
+ "title": "Sample App"
+}

@@ -142,11 +142,11 @@ class App:
 		"""Locate an app from any path inside it. App package = dir containing hooks.py and modules.txt."""
 		start = Path(path or ".").resolve()
 		for cand in [start, *start.parents]:
-			pkg = cand / cand.name  # repo root convention: <app>/<app>/hooks.py
-			for p in (cand, pkg):
+			pkgs = [cand] + sorted(d for d in cand.iterdir() if d.is_dir() and not d.name.startswith(".")) if cand.is_dir() else []
+			for p in pkgs:
 				if (p / "hooks.py").exists() and (p / "modules.txt").exists():
 					mods = [m.strip() for m in (p / "modules.txt").read_text().splitlines() if m.strip()]
-					return cls(root=p.parent if p == pkg else p.parent, name=p.name, package=p, modules=mods)
+					return cls(root=p.parent if p != cand else p.parent, name=p.name, package=p, modules=mods)
 		raise FdeskError(f"no Frappe app found at or above {start} (need hooks.py + modules.txt)")
 
 	def module_dir(self, module: str) -> Path:

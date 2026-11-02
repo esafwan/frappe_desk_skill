@@ -1,0 +1,10 @@
+<div class="fd-block fd-progress" data-state="loading">
+	<h3 class="fd-title">{{title}}</h3>
+	<div class="fd-state fd-loading" role="status" aria-label="Loading"><div class="fd-skeleton"></div></div>
+	<div class="fd-state fd-ready">
+		<div class="fd-progress-head"><span class="fd-value-sm" data-role="percent"></span><span class="fd-light" data-role="detail"></span></div>
+		<div class="fd-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-role="track"><div class="fd-fill" data-role="fill"></div></div>
+	</div>
+	<div class="fd-state fd-empty-state"><p class="fd-muted" data-role="empty-text">Nothing to measure yet.</p></div>
+	<div class="fd-state fd-error-state" role="alert"><p class="fd-error-text" data-role="error-text">Could not load data.</p><button type="button" class="fd-btn" data-role="retry">Retry</button></div>
+</div>

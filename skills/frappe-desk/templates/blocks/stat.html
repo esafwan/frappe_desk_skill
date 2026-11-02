@@ -1,0 +1,10 @@
+<div class="fd-block fd-stat" data-state="loading">
+	<h3 class="fd-title">{{title}}</h3>
+	<div class="fd-state fd-loading" role="status" aria-label="Loading"><div class="fd-skeleton"></div></div>
+	<div class="fd-state fd-ready" aria-live="polite">
+		<div class="fd-value" data-role="value"></div>
+		<a class="fd-link fd-light" data-role="link" hidden>View all</a>
+	</div>
+	<div class="fd-state fd-empty-state"><p class="fd-muted" data-role="empty-text">No data yet.</p></div>
+	<div class="fd-state fd-error-state" role="alert"><p class="fd-error-text" data-role="error-text">Could not load data.</p><button type="button" class="fd-btn" data-role="retry">Retry</button></div>
+</div>

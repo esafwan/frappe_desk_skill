@@ -1,0 +1,2 @@
+.fd-value { font-size: 32px; font-weight: 600; line-height: 40px; color: var(--text-color, #171717); font-variant-numeric: tabular-nums; }
+.fd-stat .fd-link { display: inline-block; margin-top: 8px; }

@@ -1,0 +1,4 @@
+.fd-empty-body { text-align: center; padding: 32px 16px; }
+.fd-empty-title { margin: 0 0 8px; font-size: var(--text-lg, 16px); font-weight: 600; line-height: 24px; color: var(--text-color, #171717); }
+.fd-empty-body p { margin: 0 0 16px; }
+.fd-empty-action { display: inline-flex; align-items: center; text-decoration: none; }

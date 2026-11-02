@@ -1,0 +1,47 @@
+:host { display: block; }
+.fd-block, .fd-block *, .fd-block *::before, .fd-block *::after { box-sizing: border-box; }
+.fd-block {
+	width: 100%;
+	padding: 16px;
+	background: var(--card-bg, #ffffff);
+	color: var(--text-color, #171717);
+	border: 1px solid var(--border-color, #ededed);
+	border-radius: var(--border-radius-md, var(--radius-md, 10px));
+	font-family: var(--font-stack, inherit);
+	font-size: var(--text-base, 14px);
+	line-height: 24px;
+}
+.fd-title { margin: 0 0 8px; font-size: var(--text-sm, 13px); font-weight: 500; line-height: 16px; color: var(--text-muted, #525252); }
+.fd-muted { color: var(--text-muted, #525252); }
+.fd-light { color: var(--text-light, #7c7c7c); font-size: var(--text-sm, 13px); line-height: 16px; }
+.fd-state { display: none; }
+.fd-block[data-state="loading"] .fd-loading,
+.fd-block[data-state="ready"] .fd-ready,
+.fd-block[data-state="empty"] .fd-empty-state,
+.fd-block[data-state="error"] .fd-error-state { display: block; }
+.fd-skeleton { height: 24px; width: 50%; background: var(--control-bg, #f3f3f3); border-radius: 4px; animation: fd-pulse 1.5s ease-in-out infinite; }
+.fd-skeleton + .fd-skeleton { margin-top: 8px; width: 75%; }
+@keyframes fd-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.fd-error-text { color: var(--alert-text-danger, #c52929); margin: 0 0 8px; }
+.fd-btn {
+	height: 32px;
+	padding: 0 16px;
+	font: inherit;
+	font-size: var(--text-sm, 13px);
+	color: var(--text-color, #171717);
+	background: var(--control-bg, #f3f3f3);
+	border: 1px solid var(--border-color, #ededed);
+	border-radius: var(--border-radius-md, var(--radius-md, 10px));
+	cursor: pointer;
+}
+.fd-btn:hover { border-color: var(--text-light, #7c7c7c); }
+.fd-link { color: var(--text-color, #171717); text-decoration: underline; border-radius: 4px; }
+.fd-btn:focus-visible, .fd-link:focus-visible, .fd-row:focus-visible, .fd-tile-link:focus-visible {
+	outline: 2px solid var(--btn-primary, var(--text-color, #171717));
+	outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+	.fd-skeleton { animation: none; }
+	.fd-block * { transition: none !important; }
+}
+[hidden] { display: none !important; }

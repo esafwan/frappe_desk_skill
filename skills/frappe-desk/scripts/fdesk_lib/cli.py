@@ -46,6 +46,7 @@ def main(argv) -> int:
 			print(f"warning: {w}")
 		for e in res.errors:
 			print(f"error: {e}")
-		if not res.changes and not res.errors:
+		read_only = getattr(args, "cmd", "") in {"list", "search", "check", "status", "render-preview"}
+		if not res.changes and not res.errors and not read_only:
 			print("no changes")
 	return 0 if res.ok and not res.errors else 1

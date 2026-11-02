@@ -1,0 +1,4 @@
+.fd-progress-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+.fd-value-sm { font-size: 24px; font-weight: 600; line-height: 32px; font-variant-numeric: tabular-nums; }
+.fd-track { height: 8px; background: var(--control-bg, #f3f3f3); border-radius: 4px; overflow: hidden; }
+.fd-fill { height: 100%; width: 0; background: var(--btn-primary, var(--text-color, #171717)); border-radius: 4px; transition: width 0.3s ease; }

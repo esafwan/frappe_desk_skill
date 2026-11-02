@@ -238,9 +238,17 @@ def cmd_apply(args) -> Result:
 			victims = [e for e in changed if e["doctype"] in ("Sidebar", "Dock", "Workspace")]
 			if not victims:
 				continue
-			script = "import frappe\n" + "".join(
-				f"frappe.delete_doc({e['doctype']!r}, {e['name']!r}, force=1, ignore_permissions=True)\n" for e in victims
-			) + "frappe.db.commit()"
+			# Never frappe.delete_doc here: in developer mode it deletes the app's JSON file from disk
+			# and Workspace.on_trash rewrites Custom Sidebar rows. Remove only the DB rows; migrate re-imports from the files.
+			script = (
+				"import frappe\n"
+				"def _drop(dt, n):\n"
+				"    for tf in frappe.get_meta(dt).get_table_fields():\n"
+				"        frappe.db.delete(tf.options, {'parent': n, 'parenttype': dt})\n"
+				"    frappe.db.delete(dt, {'name': n})\n"
+				+ "".join(f"_drop({e['doctype']!r}, {e['name']!r})\n" for e in victims)
+				+ "frappe.db.commit()"
+			)
 			argv = _wrap(args, _console(args, script))
 		rc, out = run(argv)
 		ran.append({"step": name, "rc": rc})

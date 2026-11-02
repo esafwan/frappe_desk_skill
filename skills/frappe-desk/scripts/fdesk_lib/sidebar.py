@@ -1,5 +1,5 @@
 """Sidebar edits. Facts: frappe/desk/doctype/sidebar_item/sidebar_item.json and
-ury_workspaces/tracks/sa-v16-workspaces-ia/research/erpnext-sidebar-mechanics.md (sections 1.1, 1.2, 3)."""
+references/mechanics.md (sections on Sidebar, Sidebar Item, item semantics)."""
 
 from __future__ import annotations
 

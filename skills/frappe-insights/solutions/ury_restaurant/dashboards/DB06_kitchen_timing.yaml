@@ -105,10 +105,10 @@ dashboards:
       - {chart: db06_open, x: 12, y: 3, w: 4, h: 3}
       - {chart: db06_modified, x: 16, y: 3, w: 4, h: 3}
       - {text: "<p>Over target = KOT not served within its branch's warning time. Not yet served = no served time recorded.</p>", x: 0, y: 6, w: 20, h: 1}
-      - {chart: db06_by_hour, x: 0, y: 7, w: 20, h: 7}
-      - {chart: db06_funnel, x: 0, y: 14, w: 8, h: 6}
-      - {chart: db06_cancel_stage, x: 8, y: 14, w: 5, h: 6}
-      - {chart: db06_target, x: 13, y: 14, w: 7, h: 6}
-      - {text: "<p><b>Partial data:</b> prep and order-to-serve times come from kitchen screen taps. On this demo site the taps are seeded milliseconds apart, so per-dish prep shows as zero and the stage chart is not realistic; on a live kitchen they fill in on their own. Queue wait needs a queued-at time.</p>", x: 0, y: 27, w: 20, h: 2}
-      - {chart: db06_stage_time, x: 0, y: 20, w: 10, h: 7}
-      - {chart: db06_item_speed, x: 10, y: 20, w: 10, h: 7}
+      - {chart: db06_by_hour, x: 0, y: 7, w: 20, h: 12}
+      - {chart: db06_stage_time, x: 0, y: 19, w: 10, h: 12}
+      - {chart: db06_funnel, x: 10, y: 19, w: 10, h: 12}
+      - {chart: db06_cancel_stage, x: 0, y: 31, w: 10, h: 11}
+      - {chart: db06_item_speed, x: 10, y: 31, w: 10, h: 11}
+      - {chart: db06_target, x: 0, y: 42, w: 20, h: 18}
+      - {text: "<p><b>Partial data:</b> prep and order-to-serve times come from kitchen screen taps. On this demo site the taps are seeded milliseconds apart, so per-dish prep shows as zero and the stage chart is not realistic; on a live kitchen they fill in on their own. Queue wait needs a queued-at time.</p>", x: 0, y: 60, w: 20, h: 3}

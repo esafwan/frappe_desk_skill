@@ -132,23 +132,23 @@ dashboards:
       - {id: f_item, label: Item, type: string, icon: package, layout: {x: 14, y: 2, w: 6, h: 1}, applies_to: {fact_stock_correction: item_code, fact_wastage_lines: item_code, fact_kot_lines: item}}
     items:
       - {text: "<p><b>Stock count and wastage.</b> Where is stock going missing, and why? For the kitchen head and finance. Default period: last 90 days; every filter applies to every chart except Item on the cancelled KOT items tile.</p>", x: 0, y: 0, w: 20, h: 2}
-      - {chart: db11_shortage, x: 0, y: 3, w: 5, h: 3}
-      - {chart: db11_excess, x: 5, y: 3, w: 5, h: 3}
-      - {chart: db11_net, x: 10, y: 3, w: 5, h: 3}
-      - {chart: db11_pct, x: 15, y: 3, w: 5, h: 3}
-      - {text: "<p><b>Kitchen wastage</b> comes from authorised URY Wastage entries; log spoiled or dropped food at each shift end. The cancelled-items outcome chart needs a disposition on partly cancelled KOT items, which this site has none of yet.</p>", x: 0, y: 6, w: 20, h: 2}
-      - {chart: db11_by_item, x: 0, y: 8, w: 12, h: 9}
-      - {chart: db11_by_reason, x: 12, y: 8, w: 8, h: 5}
-      - {chart: db11_wasted_prep, x: 12, y: 13, w: 8, h: 3}
-      - {text: "<p>Cooked and then cancelled before serving: a proxy for waste until wastage is logged.</p>", x: 12, y: 16, w: 8, h: 2}
-      - {text: "<p><b>Kitchen wastage</b> - what was thrown away and why</p>", x: 0, y: 18, w: 20, h: 1}
-      - {chart: db11_waste_value, x: 0, y: 19, w: 5, h: 3}
-      - {chart: db11_waste_pct, x: 5, y: 19, w: 5, h: 3}
-      - {text: "<p>Wastage % = authorised wastage value over net sales for the same period and branch.</p>", x: 10, y: 19, w: 10, h: 3}
-      - {chart: db11_waste_item, x: 0, y: 22, w: 10, h: 7}
-      - {chart: db11_waste_dept, x: 10, y: 22, w: 10, h: 7}
-      - {chart: db11_waste_reason, x: 0, y: 29, w: 10, h: 7}
-      - {chart: db11_void_disp, x: 10, y: 29, w: 10, h: 7}
-      - {text: "<p><b>Stock cover</b> - how many days each item lasts at its recent use</p>", x: 0, y: 36, w: 20, h: 1}
-      - {chart: db11_cover, x: 0, y: 37, w: 20, h: 7}
-      - {text: "<p>Days left = stock on hand divided by average daily use over the last 30 days. It ignores the Date filter.</p>", x: 0, y: 44, w: 20, h: 1}
+      - {chart: db11_shortage, x: 0, y: 3, w: 4, h: 3}
+      - {chart: db11_excess, x: 4, y: 3, w: 4, h: 3}
+      - {chart: db11_net, x: 8, y: 3, w: 4, h: 3}
+      - {chart: db11_pct, x: 12, y: 3, w: 4, h: 3}
+      - {chart: db11_wasted_prep, x: 16, y: 3, w: 4, h: 3}
+      - {chart: db11_by_item, x: 0, y: 6, w: 10, h: 14}
+      - {chart: db11_by_reason, x: 10, y: 6, w: 10, h: 14}
+      - {text: "<p><b>Kitchen wastage</b> comes from authorised URY Wastage entries; log spoiled or dropped food at each shift end. The cancelled-items outcome chart needs a disposition on partly cancelled KOT items, which this site has none of yet.</p>", x: 0, y: 20, w: 20, h: 3}
+      - {text: "<p>Cooked and then cancelled before serving: a proxy for waste until wastage is logged.</p>", x: 0, y: 23, w: 20, h: 1}
+      - {text: "<p><b>Kitchen wastage</b> - what was thrown away and why</p>", x: 0, y: 24, w: 20, h: 1}
+      - {chart: db11_waste_value, x: 0, y: 25, w: 10, h: 3}
+      - {chart: db11_waste_pct, x: 10, y: 25, w: 10, h: 3}
+      - {chart: db11_waste_item, x: 0, y: 28, w: 10, h: 11}
+      - {chart: db11_waste_dept, x: 10, y: 28, w: 10, h: 11}
+      - {chart: db11_waste_reason, x: 0, y: 39, w: 10, h: 11}
+      - {chart: db11_void_disp, x: 10, y: 39, w: 10, h: 11}
+      - {text: "<p>Wastage % = authorised wastage value over net sales for the same period and branch.</p>", x: 0, y: 50, w: 20, h: 1}
+      - {text: "<p><b>Stock cover</b> - how many days each item lasts at its recent use</p>", x: 0, y: 51, w: 20, h: 1}
+      - {chart: db11_cover, x: 0, y: 52, w: 20, h: 15}
+      - {text: "<p>Days left = stock on hand divided by average daily use over the last 30 days. It ignores the Date filter.</p>", x: 0, y: 67, w: 20, h: 1}

@@ -194,13 +194,13 @@ dashboards:
         y: 27
         w: 20
         h: 1
-      - {chart: db14_nonselling, x: 0, y: 28, w: 20, h: 7}
+      - {chart: db14_nonselling, x: 0, y: 28, w: 20, h: 14}
       - text: "<p><b>Where the data comes from</b> - bill mix, covers recorded and sites reporting</p>"
         x: 0
-        y: 35
+        y: 42
         w: 20
         h: 1
-      - {chart: db14_population, x: 0, y: 36, w: 8, h: 7}
-      - {chart: db14_covers_share, x: 8, y: 36, w: 8, h: 7}
-      - {chart: db14_branches, x: 16, y: 36, w: 4, h: 3}
-      - {chart: db14_companies, x: 16, y: 39, w: 4, h: 3}
+      - {chart: db14_population, x: 0, y: 43, w: 10, h: 11}
+      - {chart: db14_covers_share, x: 10, y: 43, w: 10, h: 11}
+      - {chart: db14_branches, x: 0, y: 54, w: 10, h: 3}
+      - {chart: db14_companies, x: 10, y: 54, w: 10, h: 3}

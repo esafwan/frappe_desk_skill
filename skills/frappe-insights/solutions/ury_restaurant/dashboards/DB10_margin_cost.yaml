@@ -128,21 +128,21 @@ dashboards:
       - {chart: db10_gross_margin, x: 5, y: 3, w: 5, h: 3}
       - {chart: db10_food_cost, x: 10, y: 3, w: 5, h: 3}
       - {chart: db10_labour, x: 15, y: 3, w: 5, h: 3}
-      - {chart: db10_pnl_trend, x: 0, y: 6, w: 10, h: 7}
-      - {chart: db10_profit_trend, x: 10, y: 6, w: 10, h: 7}
-      - {text: "<p>Typical food cost target: 28 to 35% of net sales.</p>", x: 0, y: 13, w: 20, h: 1}
-      - {text: "<p><b>Estimate:</b> recipe-based margin for costed items only; coverage is shown first. Under 60% coverage, treat as indicative.</p>", x: 0, y: 14, w: 20, h: 1}
-      - {chart: db10_coverage, x: 0, y: 15, w: 5, h: 3}
-      - {chart: db10_costed_sales, x: 5, y: 15, w: 5, h: 3}
-      - {chart: db10_est_margin, x: 10, y: 15, w: 5, h: 3}
-      - {chart: db10_est, x: 15, y: 15, w: 5, h: 3}
-      - {chart: db10_cat_cost, x: 0, y: 18, w: 10, h: 8}
-      - {chart: db10_menu_eng, x: 10, y: 18, w: 10, h: 8}
-      - {text: "<p><b>Fix in setup:</b> dishes without a menu category are left out; assign categories to include them.</p>", x: 0, y: 26, w: 10, h: 1}
-      - {chart: db10_recipe_check, x: 0, y: 27, w: 10, h: 6}
-      - {text: "<p>These dishes cost more to make than they sell for, per their recipe. Usually a unit or quantity error in the BOM: fix the recipe, not the price.</p>", x: 0, y: 33, w: 10, h: 1}
-      - {text: "<p><b>Partial data:</b> food cost from accounts counts cost of goods posted from purchases only, and stock used is valued at the stock rate, so both are indicative. Bills do not post cost of goods; add ingredient purchase rates and recipes.</p>", x: 0, y: 41, w: 20, h: 2}
-      - {chart: db10_variance, x: 10, y: 27, w: 10, h: 6}
-      - {chart: db10_gl_food, x: 0, y: 34, w: 10, h: 7}
-      - {chart: db10_consumption, x: 10, y: 34, w: 10, h: 7}
+      - {chart: db10_pnl_trend, x: 0, y: 6, w: 20, h: 12}
+      - {chart: db10_profit_trend, x: 0, y: 18, w: 20, h: 12}
+      - {text: "<p>Typical food cost target: 28 to 35% of net sales.</p>", x: 0, y: 30, w: 20, h: 1}
+      - {text: "<p><b>Estimate:</b> recipe-based margin for costed items only; coverage is shown first. Under 60% coverage, treat as indicative.</p>", x: 0, y: 31, w: 20, h: 1}
+      - {chart: db10_coverage, x: 0, y: 32, w: 5, h: 3}
+      - {chart: db10_costed_sales, x: 5, y: 32, w: 5, h: 3}
+      - {chart: db10_est_margin, x: 10, y: 32, w: 5, h: 3}
+      - {chart: db10_est, x: 15, y: 32, w: 5, h: 3}
+      - {chart: db10_gl_food, x: 0, y: 35, w: 20, h: 12}
+      - {chart: db10_consumption, x: 0, y: 47, w: 20, h: 12}
+      - {chart: db10_cat_cost, x: 0, y: 59, w: 20, h: 14}
+      - {chart: db10_menu_eng, x: 0, y: 73, w: 10, h: 16}
+      - {chart: db10_recipe_check, x: 10, y: 73, w: 10, h: 16}
+      - {chart: db10_variance, x: 0, y: 89, w: 20, h: 16}
+      - {text: "<p><b>Fix in setup:</b> dishes without a menu category are left out; assign categories to include them.</p>", x: 0, y: 105, w: 20, h: 1}
+      - {text: "<p>These dishes cost more to make than they sell for, per their recipe. Usually a unit or quantity error in the BOM: fix the recipe, not the price.</p>", x: 0, y: 106, w: 20, h: 2}
+      - {text: "<p><b>Partial data:</b> food cost from accounts counts cost of goods posted from purchases only, and stock used is valued at the stock rate, so both are indicative. Bills do not post cost of goods; add ingredient purchase rates and recipes.</p>", x: 0, y: 108, w: 20, h: 3}
 desk: {workspace: "URY", label: "Margin And Cost"}

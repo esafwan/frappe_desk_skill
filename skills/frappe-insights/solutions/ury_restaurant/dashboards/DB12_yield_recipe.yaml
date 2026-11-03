@@ -119,18 +119,18 @@ dashboards:
          applies_to: {fact_yield_checks: item, fact_stock_correction: item_code}}
     items:
       - {text: "<p><b>Yield and recipe.</b> Which raw materials give less usable output than the recipe standard. For kitchen head. Default: last 12 months, kg items; good is within 5 points of standard.</p>", x: 0, y: 0, w: 20, h: 2}
-      - {chart: db12_kpi, x: 0, y: 3, w: 5, h: 3}
-      - {chart: db12_kpi_std, x: 5, y: 3, w: 5, h: 3}
-      - {chart: db12_kpi_below, x: 10, y: 3, w: 5, h: 3}
-      - {chart: db12_kpi_tol, x: 15, y: 3, w: 5, h: 3}
-      - {chart: db12_gap, x: 0, y: 6, w: 10, h: 9}
-      - {chart: db12_loss, x: 10, y: 6, w: 10, h: 9}
-      - {chart: db12_trend, x: 0, y: 15, w: 20, h: 6}
-      - {chart: db12_count_var, x: 0, y: 21, w: 20, h: 7}
-      - {chart: db12_checker, x: 0, y: 34, w: 20, h: 5}
-      - {text: "<p>Checks without a station or a checker are left out of the two yield charts above.</p>", x: 0, y: 45, w: 20, h: 1}
-      - {chart: db12_dept, x: 0, y: 28, w: 10, h: 6}
-      - {chart: db12_loss_cost, x: 10, y: 28, w: 5, h: 3}
-      - {text: "<p><b>Estimate:</b> yield loss value uses the item stock rate and the net shortfall against standard.</p>", x: 15, y: 28, w: 5, h: 3}
-      - {chart: db12_checks, x: 0, y: 39, w: 20, h: 6}
-      - {text: "<p><b>Partial data:</b> checks done counts what was recorded; the expected check schedule per item is not modelled, so this cannot say who is overdue.</p>", x: 0, y: 46, w: 20, h: 1}
+      - {chart: db12_kpi, x: 0, y: 3, w: 4, h: 3}
+      - {chart: db12_kpi_std, x: 4, y: 3, w: 4, h: 3}
+      - {chart: db12_kpi_below, x: 8, y: 3, w: 4, h: 3}
+      - {chart: db12_kpi_tol, x: 12, y: 3, w: 4, h: 3}
+      - {chart: db12_loss_cost, x: 16, y: 3, w: 4, h: 3}
+      - {chart: db12_gap, x: 0, y: 6, w: 10, h: 12}
+      - {chart: db12_loss, x: 10, y: 6, w: 10, h: 12}
+      - {chart: db12_trend, x: 0, y: 18, w: 10, h: 12}
+      - {chart: db12_count_var, x: 10, y: 18, w: 10, h: 12}
+      - {chart: db12_dept, x: 0, y: 30, w: 10, h: 11}
+      - {chart: db12_checker, x: 10, y: 30, w: 10, h: 11}
+      - {chart: db12_checks, x: 0, y: 41, w: 20, h: 15}
+      - {text: "<p><b>Estimate:</b> yield loss value uses the item stock rate and the net shortfall against standard.</p>", x: 0, y: 56, w: 20, h: 1}
+      - {text: "<p>Checks without a station or a checker are left out of the two yield charts above.</p>", x: 0, y: 57, w: 20, h: 1}
+      - {text: "<p><b>Partial data:</b> checks done counts what was recorded; the expected check schedule per item is not modelled, so this cannot say who is overdue.</p>", x: 0, y: 58, w: 20, h: 1}

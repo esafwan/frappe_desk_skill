@@ -119,11 +119,11 @@ dashboards:
       - {chart: db05_kpi_dishes, x: 5, y: 3, w: 5, h: 3}
       - {chart: db05_kpi_plan, x: 10, y: 3, w: 5, h: 3}
       - {chart: db05_unmapped, x: 15, y: 3, w: 5, h: 3}
-      - {text: "<p><b>Two views of the kitchen.</b> Work counts KOTs by the station that cooked them; sales are credited to the department set on the item. They differ on about 1 in 3 KOT lines; that is expected.</p>", x: 0, y: 6, w: 20, h: 2}
-      - {chart: db05_kots_unit, x: 0, y: 8, w: 10, h: 8}
-      - {chart: db05_top_dishes, x: 10, y: 8, w: 10, h: 8}
-      - {chart: db05_plan_dept, x: 0, y: 16, w: 10, h: 7}
-      - {chart: db05_dept_rev, x: 10, y: 16, w: 10, h: 7}
-      - {text: "<p>Wastage by department is on Stock count and wastage, and yield by station is on Yield and recipe checks, so they are not repeated here.</p>", x: 0, y: 30, w: 20, h: 2}
-      - {chart: db05_warehouse, x: 0, y: 23, w: 10, h: 7}
-      - {chart: db05_policy, x: 10, y: 23, w: 10, h: 7}
+      - {chart: db05_kots_unit, x: 0, y: 6, w: 10, h: 14}
+      - {chart: db05_top_dishes, x: 10, y: 6, w: 10, h: 14}
+      - {chart: db05_plan_dept, x: 0, y: 20, w: 10, h: 14}
+      - {chart: db05_dept_rev, x: 10, y: 20, w: 10, h: 14}
+      - {chart: db05_warehouse, x: 0, y: 34, w: 10, h: 11}
+      - {chart: db05_policy, x: 10, y: 34, w: 10, h: 11}
+      - {text: "<p><b>Two views of the kitchen.</b> Work counts KOTs by the station that cooked them; sales are credited to the department set on the item. They differ on about 1 in 3 KOT lines; that is expected.</p>", x: 0, y: 45, w: 20, h: 2}
+      - {text: "<p>Wastage by department is on Stock count and wastage, and yield by station is on Yield and recipe checks, so they are not repeated here.</p>", x: 0, y: 47, w: 20, h: 2}

@@ -140,18 +140,18 @@ dashboards:
       - {chart: db02_bills, x: 5, y: 3, w: 5, h: 3}
       - {chart: db02_covers, x: 10, y: 3, w: 5, h: 3}
       - {chart: db02_spend_per_cover, x: 15, y: 3, w: 5, h: 3}
-      - {chart: db02_by_hour, x: 0, y: 6, w: 12, h: 7}
-      - {chart: db02_daily, x: 12, y: 6, w: 8, h: 7}
-      - {chart: db02_kot_kpi, x: 0, y: 13, w: 5, h: 3}
-      - {chart: db02_kot_unserved, x: 5, y: 13, w: 5, h: 3}
-      - {chart: db02_kot_prep, x: 10, y: 13, w: 5, h: 3}
-      - {chart: db02_sla, x: 15, y: 13, w: 5, h: 3}
-      - {text: "<p>Target is the KOT warning time on the POS profile (10 min, 15 for slow items).</p>", x: 0, y: 16, w: 20, h: 1}
-      - {chart: db02_occupied, x: 0, y: 17, w: 5, h: 3}
-      - {chart: db02_tables, x: 5, y: 17, w: 5, h: 3}
-      - {chart: db02_cancel_count, x: 10, y: 17, w: 5, h: 3}
-      - {chart: db02_cancel, x: 15, y: 17, w: 5, h: 3}
-      - {chart: db02_yield_checks, x: 0, y: 20, w: 5, h: 3}
-      - {chart: db02_yield_alert, x: 5, y: 20, w: 5, h: 3}
-      - {chart: db02_oos_cancel, x: 10, y: 20, w: 5, h: 3}
-      - {text: "<p>Yield checks failed = checks more than 5 points under the recipe standard.</p>", x: 15, y: 20, w: 5, h: 3}
+      - {chart: db02_kot_kpi, x: 0, y: 6, w: 5, h: 3}
+      - {chart: db02_kot_unserved, x: 5, y: 6, w: 5, h: 3}
+      - {chart: db02_kot_prep, x: 10, y: 6, w: 5, h: 3}
+      - {chart: db02_sla, x: 15, y: 6, w: 5, h: 3}
+      - {chart: db02_daily, x: 0, y: 9, w: 20, h: 12}
+      - {chart: db02_by_hour, x: 0, y: 21, w: 20, h: 12}
+      - {text: "<p>Target is the KOT warning time on the POS profile (10 min, 15 for slow items).</p>", x: 0, y: 33, w: 20, h: 1}
+      - {chart: db02_occupied, x: 0, y: 34, w: 5, h: 3}
+      - {chart: db02_tables, x: 5, y: 34, w: 5, h: 3}
+      - {chart: db02_cancel_count, x: 10, y: 34, w: 5, h: 3}
+      - {chart: db02_cancel, x: 15, y: 34, w: 5, h: 3}
+      - {chart: db02_yield_checks, x: 0, y: 37, w: 7, h: 3}
+      - {chart: db02_yield_alert, x: 7, y: 37, w: 7, h: 3}
+      - {chart: db02_oos_cancel, x: 14, y: 37, w: 6, h: 3}
+      - {text: "<p>Yield checks failed = checks more than 5 points under the recipe standard.</p>", x: 0, y: 40, w: 20, h: 1}

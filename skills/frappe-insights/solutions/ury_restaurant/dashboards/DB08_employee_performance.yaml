@@ -227,21 +227,21 @@ dashboards:
       - {chart: db08_tips_kpi, x: 10, y: 6, w: 5, h: 3}
       - {chart: db08_tips_pct, x: 15, y: 6, w: 5, h: 3}
       - {text: "<p><b>Sales and bills</b> - who sells and how big each bill is</p>", x: 0, y: 9, w: 20, h: 1}
-      - {chart: db08_sales, x: 0, y: 10, w: 10, h: 8}
-      - {chart: db08_bills_atv, x: 10, y: 10, w: 10, h: 8}
-      - {text: "<p><b>Upsell and covers</b> - who sells more drinks and earns more per guest</p>", x: 0, y: 18, w: 20, h: 1}
-      - {chart: db08_mix, x: 0, y: 19, w: 10, h: 7}
-      - {chart: db08_covers, x: 10, y: 19, w: 10, h: 7}
-      - {text: "<p><b>Cancellations and cashiers</b> - cancelled value by the person who opened the order, and sales by cashier</p>", x: 0, y: 26, w: 20, h: 1}
-      - {chart: db08_cancels, x: 0, y: 27, w: 10, h: 7}
-      - {chart: db08_cashier, x: 10, y: 27, w: 10, h: 7}
-      - {text: "<p>Cancelled value is credited to the person who opened the order, not necessarily who cancelled it. Covers count dine-in bills only.</p>", x: 0, y: 34, w: 20, h: 1}
-      - {text: "<p><b>Labour and tips</b> - sales for each hour of staff attendance, and tips entered at billing</p>", x: 0, y: 35, w: 20, h: 1}
-      - {chart: db08_labour_trend, x: 0, y: 36, w: 12, h: 7}
-      - {chart: db08_tips_waiter, x: 12, y: 36, w: 8, h: 7}
-      - {text: "<p><b>Partial data:</b> sales per labour hour = branch net sales divided by attendance hours, for days with both; staff without attendance are not counted. <b>Not recorded yet:</b> commission; it is worked out in the Commission report, not saved on the bill, so only tips show.</p>", x: 0, y: 43, w: 20, h: 3}
-      - {text: "<p><b>Discounts, kitchen speed and service charge</b> - who discounts, how fast cooks are, what service charge is billed</p>", x: 0, y: 46, w: 20, h: 1}
-      - {chart: db08_discount, x: 0, y: 47, w: 10, h: 7}
-      - {chart: db08_cook, x: 10, y: 47, w: 10, h: 7}
-      - {chart: db08_service, x: 0, y: 54, w: 5, h: 3}
-      - {text: "<p>Cook speed needs a named cook on each ready tap; on this site every tap was made by the Administrator login, which is left out, so the chart is empty until cooks sign in. Service charge is the tax lines named service charge on paid bills.</p>", x: 5, y: 54, w: 15, h: 3}
+      - {chart: db08_sales, x: 0, y: 10, w: 20, h: 14}
+      - {chart: db08_bills_atv, x: 0, y: 24, w: 20, h: 16}
+      - {text: "<p><b>Upsell and covers</b> - who sells more drinks and earns more per guest</p>", x: 0, y: 40, w: 20, h: 1}
+      - {chart: db08_mix, x: 0, y: 41, w: 20, h: 14}
+      - {chart: db08_covers, x: 0, y: 55, w: 20, h: 16}
+      - {text: "<p><b>Cancellations and cashiers</b> - cancelled value by the person who opened the order, and sales by cashier</p>", x: 0, y: 71, w: 20, h: 1}
+      - {chart: db08_cancels, x: 0, y: 72, w: 10, h: 14}
+      - {chart: db08_cashier, x: 10, y: 72, w: 10, h: 14}
+      - {text: "<p>Cancelled value is credited to the person who opened the order, not necessarily who cancelled it. Covers count dine-in bills only.</p>", x: 0, y: 86, w: 20, h: 1}
+      - {text: "<p><b>Labour and tips</b> - sales for each hour of staff attendance, and tips entered at billing</p>", x: 0, y: 87, w: 20, h: 1}
+      - {chart: db08_labour_trend, x: 0, y: 88, w: 20, h: 12}
+      - {chart: db08_tips_waiter, x: 0, y: 100, w: 20, h: 14}
+      - {text: "<p><b>Partial data:</b> sales per labour hour = branch net sales divided by attendance hours, for days with both; staff without attendance are not counted. <b>Not recorded yet:</b> commission; it is worked out in the Commission report, not saved on the bill, so only tips show.</p>", x: 0, y: 114, w: 20, h: 3}
+      - {text: "<p><b>Discounts, kitchen speed and service charge</b> - who discounts, how fast cooks are, what service charge is billed</p>", x: 0, y: 117, w: 20, h: 1}
+      - {chart: db08_service, x: 0, y: 118, w: 20, h: 3}
+      - {chart: db08_discount, x: 0, y: 121, w: 10, h: 14}
+      - {chart: db08_cook, x: 10, y: 121, w: 10, h: 14}
+      - {text: "<p>Cook speed needs a named cook on each ready tap; on this site every tap was made by the Administrator login, which is left out, so the chart is empty until cooks sign in. Service charge is the tax lines named service charge on paid bills.</p>", x: 0, y: 135, w: 20, h: 3}

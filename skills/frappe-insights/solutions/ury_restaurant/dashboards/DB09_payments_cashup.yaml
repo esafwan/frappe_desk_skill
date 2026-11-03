@@ -132,13 +132,13 @@ dashboards:
       - {chart: db09_unclosed, x: 12, y: 3, w: 4, h: 3}
       - {chart: db09_unclosed_n, x: 16, y: 3, w: 4, h: 3}
       - {text: "<p>Not yet closed = paid bills not yet included in a POS closing. Close the shift to move them into cash-up.</p>", x: 0, y: 6, w: 20, h: 1}
-      - {text: "<p><b>Not enough data yet:</b> every cash-up on this site balances exactly, so no differences show. Cash-up covers bills already closed into a shift; paid bills not yet closed show above as Not yet closed.</p>", x: 0, y: 7, w: 20, h: 2}
-      - {chart: db09_exp_counted, x: 0, y: 9, w: 12, h: 9}
-      - {chart: db09_diff, x: 12, y: 9, w: 4, h: 3}
-      - {chart: db09_variance, x: 16, y: 9, w: 4, h: 3}
-      - {chart: db09_diff_shifts, x: 12, y: 12, w: 8, h: 6}
-      - {text: "<p>Expected = cash the system says should be in the drawer. Counted = what the cashier counted at close.</p>", x: 0, y: 18, w: 12, h: 2}
-      - {text: "<p>The table lists only shifts where counted cash differs from expected. If it is empty, every shift in the period closed with no difference.</p>", x: 12, y: 18, w: 8, h: 2}
-      - {chart: db09_mode, x: 0, y: 20, w: 6, h: 7}
-      - {chart: db09_mode_ot, x: 6, y: 20, w: 14, h: 7}
-      - {chart: db09_cashier, x: 0, y: 27, w: 20, h: 7}
+      - {chart: db09_diff, x: 0, y: 7, w: 10, h: 3}
+      - {chart: db09_variance, x: 10, y: 7, w: 10, h: 3}
+      - {chart: db09_exp_counted, x: 0, y: 10, w: 20, h: 12}
+      - {chart: db09_mode_ot, x: 0, y: 22, w: 10, h: 12}
+      - {chart: db09_mode, x: 10, y: 22, w: 10, h: 12}
+      - {chart: db09_cashier, x: 0, y: 34, w: 20, h: 14}
+      - {chart: db09_diff_shifts, x: 0, y: 48, w: 20, h: 16}
+      - {text: "<p><b>Not enough data yet:</b> every cash-up on this site balances exactly, so no differences show. Cash-up covers bills already closed into a shift; paid bills not yet closed show above as Not yet closed.</p>", x: 0, y: 64, w: 20, h: 2}
+      - {text: "<p>Expected = cash the system says should be in the drawer. Counted = what the cashier counted at close.</p>", x: 0, y: 66, w: 20, h: 1}
+      - {text: "<p>The table lists only shifts where counted cash differs from expected. If it is empty, every shift in the period closed with no difference.</p>", x: 0, y: 67, w: 20, h: 2}

@@ -102,17 +102,16 @@ dashboards:
       - {chart: db03_avg_bill_kpi, x: 8, y: 3, w: 4, h: 3}
       - {chart: db03_items_per_bill_kpi, x: 12, y: 3, w: 4, h: 3}
       - {chart: db03_discounts_kpi, x: 16, y: 3, w: 4, h: 3}
-      - {chart: db03_daily, x: 0, y: 6, w: 20, h: 7}
-      - {chart: db03_grid, x: 0, y: 13, w: 12, h: 8}
-      - {chart: db03_channel, x: 12, y: 13, w: 8, h: 8}
-      - {text: "<p>Net sales exclude tax and cancelled bills. Average bill = net sales per bill.</p>", x: 0, y: 21, w: 20, h: 1}
-      # SAL-020 self-order bills: QR/kiosk ordering sessions turned into a bill. SAL-021 is the target section above.
-      - {text: "<p><b>Sales against target</b> - monthly net sales against the branch target</p>", x: 0, y: 22, w: 20, h: 1}
-      - {chart: db03_target_attain, x: 0, y: 23, w: 5, h: 3}
-      - {chart: db03_target_mtd, x: 5, y: 23, w: 5, h: 3}
-      - {chart: db03_target_amount, x: 10, y: 23, w: 5, h: 3}
-      - {chart: db03_target_actual, x: 15, y: 23, w: 5, h: 3}
-      - {chart: db03_target_month, x: 0, y: 26, w: 20, h: 7}
-      - {text: "<p>Closed months compare a full month to its target; the current month is month to date. Only branches with a target appear.</p>", x: 0, y: 33, w: 20, h: 1}
-      - {chart: db03_self_order, x: 0, y: 34, w: 5, h: 3}
-      - {text: "<p>Bills that came from a guest QR or kiosk ordering session. This tile follows the Date filter only; there is no branch on a session.</p>", x: 5, y: 34, w: 15, h: 3}
+      - {chart: db03_daily, x: 0, y: 6, w: 20, h: 12}
+      - {chart: db03_channel, x: 0, y: 18, w: 20, h: 13}
+      - {chart: db03_grid, x: 0, y: 31, w: 20, h: 15}
+      - {text: "<p>Net sales exclude tax and cancelled bills. Average bill = net sales per bill.</p>", x: 0, y: 46, w: 20, h: 1}
+      - {text: "<p><b>Sales against target</b> - monthly net sales against the branch target</p>", x: 0, y: 47, w: 20, h: 1}
+      - {chart: db03_target_attain, x: 0, y: 48, w: 5, h: 3}
+      - {chart: db03_target_mtd, x: 5, y: 48, w: 5, h: 3}
+      - {chart: db03_target_amount, x: 10, y: 48, w: 5, h: 3}
+      - {chart: db03_target_actual, x: 15, y: 48, w: 5, h: 3}
+      - {chart: db03_target_month, x: 0, y: 51, w: 20, h: 12}
+      - {text: "<p>Closed months compare a full month to its target; the current month is month to date. Only branches with a target appear.</p>", x: 0, y: 63, w: 20, h: 1}
+      - {chart: db03_self_order, x: 0, y: 64, w: 20, h: 3}
+      - {text: "<p>Bills that came from a guest QR or kiosk ordering session. This tile follows the Date filter only; there is no branch on a session.</p>", x: 0, y: 67, w: 20, h: 2}

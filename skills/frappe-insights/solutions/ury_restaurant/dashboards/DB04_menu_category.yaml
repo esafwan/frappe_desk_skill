@@ -89,14 +89,14 @@ dashboards:
       - {chart: db04_dishes_kpi, x: 10, y: 3, w: 5, h: 3}
       - {chart: db04_avg_price_kpi, x: 15, y: 3, w: 5, h: 3}
       - {text: "<p><b>Categories</b> - which menu categories earn the most</p>", x: 0, y: 6, w: 20, h: 1}
-      - {chart: db04_cat_rev, x: 0, y: 7, w: 12, h: 9}
-      - {chart: db04_unassigned, x: 12, y: 7, w: 5, h: 3}
-      - {text: "<p><b>Fix in setup:</b> these items sit in All Item Groups; move them to a menu Item Group to rank them.</p>", x: 12, y: 10, w: 8, h: 2}
-      - {text: "<p><b>Dishes</b> - what sells best and worst</p>", x: 0, y: 16, w: 20, h: 1}
-      - {chart: db04_top, x: 0, y: 17, w: 10, h: 9}
-      - {chart: db04_bottom, x: 10, y: 17, w: 10, h: 9}
-      - {chart: db04_item_table, x: 0, y: 26, w: 20, h: 7}
-      - {text: "<p><b>Margin and non-sellers</b> - which dishes earn per plate, and which never sold</p>", x: 0, y: 33, w: 20, h: 1}
-      - {chart: db04_menu_eng, x: 0, y: 34, w: 12, h: 9}
-      - {text: "<p><b>Estimate:</b> margin uses recipe (BOM) cost and covers only costed dishes, about 6-8% of sales today. Dishes costing more than their price are left out.</p>", x: 12, y: 34, w: 8, h: 3}
-      - {chart: db04_nonselling, x: 12, y: 37, w: 8, h: 6}
+      - {chart: db04_unassigned, x: 0, y: 7, w: 20, h: 3}
+      - {chart: db04_cat_rev, x: 0, y: 10, w: 20, h: 14}
+      - {text: "<p><b>Fix in setup:</b> these items sit in All Item Groups; move them to a menu Item Group to rank them.</p>", x: 0, y: 24, w: 20, h: 1}
+      - {text: "<p><b>Dishes</b> - what sells best and worst</p>", x: 0, y: 25, w: 20, h: 1}
+      - {chart: db04_top, x: 0, y: 26, w: 10, h: 11}
+      - {chart: db04_bottom, x: 10, y: 26, w: 10, h: 11}
+      - {chart: db04_item_table, x: 0, y: 37, w: 20, h: 15}
+      - {text: "<p><b>Margin and non-sellers</b> - which dishes earn per plate, and which never sold</p>", x: 0, y: 52, w: 20, h: 1}
+      - {chart: db04_menu_eng, x: 0, y: 53, w: 10, h: 22}
+      - {chart: db04_nonselling, x: 10, y: 53, w: 10, h: 22}
+      - {text: "<p><b>Estimate:</b> margin uses recipe (BOM) cost and covers only costed dishes, about 6-8% of sales today. Dishes costing more than their price are left out.</p>", x: 0, y: 75, w: 20, h: 2}

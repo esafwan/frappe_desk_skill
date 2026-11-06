@@ -1,7 +1,7 @@
 # DB11 Wastage And Shrinkage. Audience: kitchen head, finance. Levels: item, raw category, branch, department (wastage, T4).
 # Shrinkage (stock correction child rows) is T1; URY Wastage has 0 rows on the demo (T4): banner + pre-wired empty query
 # (verify V02 on fact_wastage_lines is expected). Base queries copied verbatim from semantic_layer.yaml.
-workbook: {id: ury_db11_wastage_shrinkage, title: "URY DB11 Wastage And Shrinkage", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db11_wastage_shrinkage, title: "URY Wastage And Shrinkage", module: "URY", required_apps: [ury]}
 queries:
   # ---------------------------------------------------------------- STOCK / YIELD / WASTE / PLAN
   # fact_stock_correction (builder, T1 on child rows). Grain: one Stock Correction Item of a submitted correction.

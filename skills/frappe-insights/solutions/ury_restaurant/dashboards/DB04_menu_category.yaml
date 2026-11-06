@@ -2,7 +2,7 @@
 # Base queries copied VERBATIM from semantic_layer.yaml (fact_sales_lines_enriched, dim_item); probes dropped.
 # Population: Consolidated + Paid both included (item/category revenue). Category = CATEGORY_MAP v1 menu_category
 # everywhere (never raw item_group). Department filter = CONFIGURED department (item + branch).
-workbook: {id: ury_db04_menu_category, title: "URY DB04 Menu And Category", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db04_menu_category, title: "URY Menu And Category", module: "URY", required_apps: [ury]}
 queries:
   # fact_sales_lines_enriched (sql, T1/T2). Same grain as fact_sales_lines plus: cleaned menu_category and
   # category_family (CATEGORY_MAP v1), branch-safe configured department, BOM-based estimated cost.

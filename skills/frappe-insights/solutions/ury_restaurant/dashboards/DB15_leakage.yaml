@@ -1,7 +1,7 @@
 # DB15 Leakage (cancellations, voids, discounts, zero bills). Built from dashboard_portfolio.md section DB15.
 # Base queries copied verbatim from semantic_layer.yaml (fact_invoices, fact_cancellations, fact_kot_headers,
 # fact_kot_lines, fact_kot_exec). Waiter on cancellations = order owner, not the canceller (R14).
-workbook: {id: ury_db15_leakage, title: "URY DB15 Leakage", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db15_leakage, title: "URY Leakage", module: "URY", required_apps: [ury]}
 queries:
   # fact_invoices (builder, T1). Grain: one submitted, non-return POS Invoice (the bill).
   # Use for bill counts, ATV, covers (pax, Paid population + Dine In only), order type, waiter, hour/weekday.

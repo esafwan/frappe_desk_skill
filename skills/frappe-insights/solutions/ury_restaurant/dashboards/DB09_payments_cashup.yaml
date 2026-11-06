@@ -2,7 +2,7 @@
 # Base queries copied verbatim from semantic_layer.yaml (fact_payments, fact_invoices, fact_closing_details).
 # Closings exist only for Consolidated bills; Paid bills are "unclosed sales" (PAY-008). Sales Invoice Payment is
 # always filtered parenttype = 'POS Invoice'.
-workbook: {id: ury_db09_payments_cashup, title: "URY DB09 Payments And Cashup", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db09_payments_cashup, title: "URY Payments And Cashup", module: "URY", required_apps: [ury]}
 queries:
   - id: fact_invoices
     title: "fact_invoices"

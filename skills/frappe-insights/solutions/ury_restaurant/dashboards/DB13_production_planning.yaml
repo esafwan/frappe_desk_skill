@@ -2,7 +2,7 @@
 # Base queries copied verbatim from semantic_layer.yaml (fact_sales_plan_items, fact_cancellations).
 # Never row-join plan x sales (architecture rule 2): section S4 shows two charts side by side under the same filters.
 # Layout: portfolio coordinates shifted +1 on y because the 3 filters occupy row y=0.
-workbook: {id: ury_db13_production_planning, title: "URY DB13 Production Planning", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db13_production_planning, title: "URY Production Planning", module: "URY", required_apps: [ury]}
 queries:
   # fact_sales_plan_items (builder, T1). Grain: one URY Sales Plan Item of a submitted plan (Locked for Production).
   # Attainment = SUM(fulfilled_qty)/SUM(qty). under/over split per line BEFORE aggregation. Date column: plan_date.

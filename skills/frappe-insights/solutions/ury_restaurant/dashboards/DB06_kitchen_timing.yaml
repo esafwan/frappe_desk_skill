@@ -2,7 +2,7 @@
 # Durations come only from the native-SQL fact_kot_exec (TIMESTAMPDIFF), never time_diff. On the demo every Execution
 # stamp is milliseconds apart (T3), so the duration section is a banner, not a fake chart.
 # Chart-level filter order_status = 'Served' on the AVG(prod_minutes) charts is required by the fact_kot_headers comment.
-workbook: {id: ury_db06_kitchen_timing, title: "URY DB06 Kitchen Timing", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db06_kitchen_timing, title: "URY Kitchen Timing", module: "URY", required_apps: [ury]}
 queries:
   # ---------------------------------------------------------------- KITCHEN / KOT
   # fact_kot_headers (builder, T2). Grain: one submitted URY KOT. The SLA target is joined from POS Profile

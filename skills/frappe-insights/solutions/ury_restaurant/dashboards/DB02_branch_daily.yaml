@@ -1,5 +1,5 @@
 # DB02 Branch daily manager. Built from dashboard_portfolio.md section DB02. Base queries copied verbatim from semantic_layer.yaml.
-workbook: {id: ury_db02_branch_daily, title: "URY DB02 Branch Daily", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db02_branch_daily, title: "URY Branch Daily", module: "URY", required_apps: [ury]}
 queries:
   # fact_invoices (builder, T1). Grain: one submitted, non-return POS Invoice (the bill).
   # Use for bill counts, ATV, covers (pax, Paid population + Dine In only), order type, waiter, hour/weekday.

@@ -3,7 +3,7 @@
 # SUM(output_qty)/SUM(input_qty)*100 per UOM, never AVG(actual_yield_percent); f_uom defaults to Kg so Kg and Litre are not mixed.
 # Honesty: yield by station (YLD-008) and by checker are charted from the department and checked_by set on each check.
 # Base queries below are copied verbatim from semantic_layer.yaml (fact_yield_checks, fact_stock_correction).
-workbook: {id: ury_db12_yield_recipe, title: "URY DB12 Yield And Recipe", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db12_yield_recipe, title: "URY Yield And Recipe", module: "URY", required_apps: [ury]}
 queries:
   # fact_stock_correction (builder, T1 on child rows). Grain: one Stock Correction Item of a submitted correction.
   # Use child amount_difference (header difference_amount is 0 on 20/20: never use it). Negative = shrink.

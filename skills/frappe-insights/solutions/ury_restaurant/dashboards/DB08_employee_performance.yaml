@@ -1,6 +1,6 @@
 # DB08 Employee performance (waiter / cashier). Indicators, not verdicts. Waiter and covers metrics are Paid-population only.
 # L1 queries below are copied verbatim from semantic_layer.yaml (ids, titles, operations, comments).
-workbook: {id: ury_db08_employee_performance, title: "URY DB08 Employee Performance", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db08_employee_performance, title: "URY Employee Performance", module: "URY", required_apps: [ury]}
 queries:
   # fact_invoices (builder, T1). Grain: one submitted, non-return POS Invoice (the bill).
   # Use for bill counts, ATV, covers (pax, Paid population + Dine In only), order type, waiter, hour/weekday.

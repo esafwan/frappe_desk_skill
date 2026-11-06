@@ -5,7 +5,7 @@
 # so it is not copied (lint L24 would flag an unused query).
 # Date filter has NO default here on purpose: data-quality counts are all-history counts (62 of 202 items, 2102/1075 bills);
 # a "Last 90 days" default would silently shrink them (demo history starts 2025-08-06).
-workbook: {id: ury_db14_data_quality, title: "URY DB14 Data Quality", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db14_data_quality, title: "URY Data Quality", module: "URY", required_apps: [ury]}
 queries:
   # fact_invoices (builder, T1). Grain: one submitted, non-return POS Invoice (the bill).
   # Use for bill counts, ATV, covers (pax, Paid population + Dine In only), order type, waiter, hour/weekday.

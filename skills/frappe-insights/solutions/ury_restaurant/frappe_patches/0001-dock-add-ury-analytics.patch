@@ -1,0 +1,23 @@
+diff --git a/frappe/dock/frappe/frappe.json b/frappe/dock/frappe/frappe.json
+index 5bb40e3..373ca37 100644
+--- a/frappe/dock/frappe/frappe.json
++++ b/frappe/dock/frappe/frappe.json
+@@ -116,9 +116,17 @@
+    "link_to": "System",
+    "link_type": "Sidebar",
+    "title": "System"
++  },
++  {
++   "added": 0,
++   "hidden": 0,
++   "icon": "chart-column",
++   "link_to": "URY Analytics",
++   "link_type": "Sidebar",
++   "title": "Analytics"
+   }
+  ],
+- "modified": "2026-10-22 12:00:00.000000",
++ "modified": "2026-11-03 08:47:29.486456",
+  "modified_by": "Administrator",
+  "name": "frappe",
+  "owner": "Administrator",

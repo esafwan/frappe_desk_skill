@@ -2,7 +2,7 @@
 # Tiers: P and L (T2 seeded) > recipe estimate (T2, costed items only) > GL/stock (T4). Every margin sits next to its coverage.
 # Population: revenue/cost roll-ups use BOTH populations (no population filter). No employee margin exists (architecture 5).
 # Department = CONFIGURED department (money view). dim_item from the portfolio is not used by any DB10 chart, so it is not copied (lint L24).
-workbook: {id: ury_db10_margin_cost, title: "URY DB10 Margin And Cost", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db10_margin_cost, title: "URY Margin And Cost", module: "URY", required_apps: [ury]}
 queries:
   # fact_daily_pnl (builder, T2: seeded, recipe cost covers ~6-8% of revenue). Grain: one submitted URY Daily P and L
   # (branch x date). Date column: date.

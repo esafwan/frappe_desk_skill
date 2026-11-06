@@ -2,7 +2,7 @@
 # Two department variants are shown SEPARATELY on purpose (architecture section 2): CONFIGURED department (money:
 # fact_sales_lines_enriched / fact_sales_lines) and EXECUTED unit (kitchen work: fact_kot_headers / fact_kot_lines).
 # Base queries copied verbatim from semantic_layer.yaml (probe charts dropped).
-workbook: {id: ury_db05_department_production, title: "URY DB05 Department Production", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db05_department_production, title: "URY Department Production", module: "URY", required_apps: [ury]}
 queries:
   # fact_sales_lines (warehouse donut) dropped per UX change list; query removed as no chart uses it.
   # fact_sales_lines_enriched (sql, T1/T2). Same grain as fact_sales_lines plus: cleaned menu_category and

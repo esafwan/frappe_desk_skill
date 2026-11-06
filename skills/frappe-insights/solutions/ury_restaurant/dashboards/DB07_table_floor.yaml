@@ -1,7 +1,7 @@
 # DB07 Table & floor timing (audience: floor/FOH manager, branch manager). Levels: branch, waiter, table/room.
 # Queries are copied verbatim from semantic_layer.yaml: fact_table_sessions, dim_table, fact_invoices.
 # Population rules: covers (db07_covers) Paid only; dwell uses dwell_valid = 1 only (T2 proxy, see footnote and bottom caveat).
-workbook: {id: ury_db07_table_floor, title: "URY DB07 Table And Floor", module: "URY", required_apps: [ury]}
+workbook: {id: ury_db07_table_floor, title: "URY Table And Floor", module: "URY", required_apps: [ury]}
 queries:
   - id: fact_invoices
     title: "fact_invoices"
